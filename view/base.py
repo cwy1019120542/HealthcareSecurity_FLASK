@@ -1,3 +1,4 @@
+from calendar import monthrange
 from model import model_dict
 from flask import views, request, abort, session
 from response import OKPage
@@ -47,8 +48,10 @@ class Base(views.MethodView):
                 value_split = value.split('_')
                 if len(value_split) < 2:
                     abort(400)
-                start_date = datetime.strptime(value_split[0], '%Y-%m-%d')
-                end_date = datetime.strptime(value_split[1], '%Y-%m-%d')
+                start_date = datetime.strptime(f'{value_split[0]}-01 00:00:00', '%Y-%m-%d %H:%M:%S')
+                end_date_year, end_date_month = value_split[1].split('-')
+                end_date_str = f'{value_split[1]}-{monthrange(int(end_date_year), int(end_date_month))[1]} 23:59:59'
+                end_date = datetime.strptime(end_date_str, '%Y-%m-%d %H:%M:%S')
                 parameter_dict[key] = [start_date, end_date]
             else:
                 if not isinstance(value, value_type):
