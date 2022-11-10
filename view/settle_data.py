@@ -32,5 +32,5 @@ class SettleDataStatistic(Base):
             if key in ['time_count', 'number_count']:
                 result_dict[key] = value
             else:
-                result_dict[key] = round(value, 2)
+                result_dict[key] = round(float(value), 2)
         return OK(result_dict)
