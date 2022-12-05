@@ -14,7 +14,7 @@ class Password(Base):
 
     def put(self, user_id):
         self.authentication(user_id, self.authority_name)
-        parameter_dict = self.filter_parameter()
+        parameter_dict = self.filter_parameter(False)
         model = model_dict[self.model_name]
         user = model.query.filter_by(id=user_id).first()
         if not user or user.password != parameter_dict['old_password']:

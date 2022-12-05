@@ -15,17 +15,11 @@ class Base(views.MethodView):
         self.model = None
 
     @classmethod
-    def filter_parameter(cls):
+    def filter_parameter(cls, is_check_town=True):
         method_dict = {"GET": "args", "POST": "form", "PUT": "form"}
         method = request.method
         flask_parameter_dict = getattr(request, method_dict[method])
         parameter_dict = dict(flask_parameter_dict) if flask_parameter_dict else {}
-        session_town = session.get('town')
-        session_village = session.get('village')
-        if session_town:
-            parameter_dict['town'] = session_town
-        if session_village:
-            parameter_dict['village'] = session_village
         if 'year' not in parameter_dict:
             parameter_dict['year'] = Config.DEFAULT_YEAR
         allowed_parameter_dict = cls.allowed_parameter[method]
@@ -37,7 +31,7 @@ class Base(views.MethodView):
             if key not in allowed_parameter_dict or not value:
                 parameter_dict.pop(key)
                 continue
-            value_type, remark = allowed_parameter_dict[key]
+            value_type, value_len = allowed_parameter_dict[key]
             if value_type == "enum":
                 value_split = value.split('_')
                 for value_single in value_split:
@@ -64,8 +58,12 @@ class Base(views.MethodView):
                             abort(400)
                     else:
                         abort(400)
-                if remark and len(value) > remark:
+                if value_len and len(value) > value_len:
                     abort(400)
+        session_town = session.get('town')
+        if session_town and is_check_town:
+            if 'town' not in parameter_dict or parameter_dict['town']!=session_town:
+                abort(400)
         return dict(parameter_dict)
 
     @classmethod
@@ -91,7 +89,7 @@ class Base(views.MethodView):
     def get(self):
         parameter_dict = self.filter_parameter()
         page = parameter_dict.pop("page", 1)
-        limit = parameter_dict.pop("limit", 10)
+        limit = parameter_dict.pop("limit", 7)
         year = parameter_dict.pop('year')
         model = model_dict[f'{self.model_name}_{year}']
         offset = (page - 1) * limit

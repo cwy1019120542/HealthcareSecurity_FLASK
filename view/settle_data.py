@@ -4,14 +4,33 @@ from flask import session
 from sqlalchemy.sql import func, distinct
 from response import OK
 
+class SettleDataList(Base):
+
+    methods = ['get']
+    model_name = "settle_data"
+    authority_name = "settle_data"
+    allowed_parameter = {
+        "GET": {
+            'year': ("enum", None), 'name': (str, 20), "id_number": (str, 18), "person_type": ("enum", None), "pay_place": ("enum", None), "hospital_level": ("enum", None),
+            "evidence_type": ("enum", None), "cure_type": ("enum", None), "settle_date": ("date", None), "page": (int, None),
+            "attribute": ("enum", None), "second_attribute": ("enum", None), "poverty_state": ("enum", None), "town": ("enum", None), "village": ("enum", None)
+        }
+    }
+
+    def get(self, user_id):
+        self.authentication(user_id, self.authority_name)
+        return super().get()
+
+
+
 class SettleDataStatistic(Base):
 
     methods = ['get']
-    authority_name = "settle_data_statistic"
+    authority_name = "settle_data"
     allowed_parameter = {
         "GET": {
             'year': ("enum", None), "person_type": ("enum", None), "pay_place": ("enum", None), "hospital_level": ("enum", None),
-            "evidence_type": ("enum", None), "cure_type": ("enum", None), "settle_date": ("date", None),
+            "evidence_type": ("enum", None), "cure_type": ("enum", None), "settle_date": ("date", None), 'name': (str, 20), "id_number": (str, 18),
             "attribute": ("enum", None), "second_attribute": ("enum", None), "poverty_state": ("enum", None), "town": ("enum", None), "village": ("enum", None)
         }
     }
