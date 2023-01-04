@@ -5,20 +5,18 @@ from response import OK
 from flask import abort
 
 class Password(Base):
+
     methods = ['put']
     model_name = "user"
-    authority_name = 'user'
     allowed_parameter = {
         "PUT": {'old_password': (str, 20), 'new_password': (str, 20)},
     }
+    is_year = False
 
-    def put(self, user_id):
-        self.authentication(user_id, self.authority_name)
-        parameter_dict = self.filter_parameter(False)
-        model = model_dict[self.model_name]
-        user = model.query.filter_by(id=user_id).first()
-        if not user or user.password != parameter_dict['old_password']:
+    def make_response(self):
+        user = self.query.filter_by(id=self.user_id).first()
+        if not user or user.password != self.parameter_dict['old_password']:
             abort(400)
-        user.password = parameter_dict['new_password']
+        user.password = self.parameter_dict['new_password']
         db.session.commit()
-        return OK(user.data_response())
+        self.response = user.data_response()

@@ -13,8 +13,8 @@ class Config:
 
 class EnumerateData:
     attribute = ('农村特困供养', '城市特困供养', '农村低保', '城市低保', '一般居民')
-    second_attribute = ('孤儿', '重点优抚对象', '重度残疾人', '事实无人抚养儿童', '无')
-    insured_state = ('本地居民', '本地职工', '异地居民', '异地职工', '死亡失联', '死亡', '失联', '动态新增', '参军服刑', '参军', '服刑', '自愿放弃', '其他')
+    second_attribute = ('孤儿', '重点优抚对象', '重度残疾人', '事实无人抚养儿童', '肇事肇祸精神病人', '无')
+    insured_state = ('本地居民', '本地职工', '异地居民', '异地职工', '死亡', '失联', '动态新增', '参军', '服刑', '自愿放弃', '其他')
     poverty_state = ('监测户', '稳定脱贫人口', '致贫返贫人口', '不贫困', '贫困人口')
     town_village_dict = {
         '梅城镇': ('七里村', '万岭村', '东关社区', '凤凰村', '利民村', '北街村', '北街社区', '双塘村', '太平村', '平桥村', '彭岭村', '彰法山社区', '新桃园社区', '模范村', '河庄村', '河湾村', '潘铺村', '舒苑社区', '蔬菜村', '高集村', '龙井社区', '其他'),
@@ -37,7 +37,6 @@ class EnumerateData:
         '其他': ('其他', ),}
     town = tuple(town_village_dict.keys())
     village = tuple(set(j for i in town_village_dict.values() for j in i))
-    insured_area = ('本地', '市内异地', '省内异地', '跨省异地', '其他')
     authority = {'管理员': ('*', ), '医保局': ('insured_data', 'user', 'settle_data'), '政府': ('insured_data', 'user')}
     identity = tuple(authority.keys())
     person_type = ('居民', '职工')
@@ -47,6 +46,8 @@ class EnumerateData:
     cure_type =('药店购药', '普通门诊', '两病门诊', '双通道购药', '普通住院', '无法确定他方责任的意外伤害（外伤住院）', '转外诊治住院', '急诊转住院', '单病种住院', '日间手术', '生育门诊（产前检查）', '生育住院', '计生生育门诊', '同病同保障住院', '床日费用住院', '门诊慢性病', '门诊特殊病', '计划生育住院', '门诊单病种', '大额普通门诊', '残疾人辅助器具', '日间病床', '无他方责任意外伤害住院', '分疗程间断住院治疗', '18周岁以下苯丙酮尿症', '18周岁以下四氢生物蝶呤缺乏症', '18周岁以下苯丙酮尿症以及四氢生物蝶呤缺乏症', '其他')
     year = ('2019', '2020', '2021', '2022', '2023')
     hospital_community = ('市立医院', '中医院')
+    pay_exists_dict = {'统筹基金': 'overall_pay', '大额医疗': 'large_pay', '大病保险': 'big_pay', '医疗救助': 'rescue_pay', '公务员医疗补助': 'civil_pay', '其他基金': 'other_pay', '基金支付总额': 'all_pay', '个人现金': 'cash_pay', '个人账户': 'account_pay', '账户共济': 'together_pay'}
+    pay_exists = tuple(pay_exists_dict.keys())
 
     @classmethod
     def data_response(cls):
@@ -56,7 +57,6 @@ class EnumerateData:
             "insured_state": cls.insured_state,
             "poverty_state": cls.poverty_state,
             "town_village_dict": cls.town_village_dict,
-            "insured_area": cls.insured_area,
             'person_type': cls.person_type,
             'pay_place': cls.pay_place,
             'hospital_level': cls.hospital_level,
@@ -65,4 +65,5 @@ class EnumerateData:
             'year': cls.year,
             'hospital_community': cls.hospital_community,
             'default_year': Config.DEFAULT_YEAR,
+            'pay_exists': cls.pay_exists,
         }

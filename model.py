@@ -16,7 +16,6 @@ class InsuredData2019(db.Model):
     own_expense = db.Column(db.Float)
     pay_date = db.Column(db.DateTime)
     insured_state = db.Column(db.Enum(*EnumerateData.insured_state))
-    insured_area = db.Column(db.Enum(*EnumerateData.insured_area))
     attribute = db.Column(db.Enum(*EnumerateData.attribute))
     second_attribute = db.Column(db.Enum(*EnumerateData.second_attribute))
     poverty_state = db.Column(db.Enum(*EnumerateData.poverty_state))
@@ -34,7 +33,6 @@ class InsuredData2019(db.Model):
             "own_expense": self.own_expense,
             "pay_date": to_string_date(self.pay_date),
             "insured_state" : self.insured_state,
-            "insured_area" : self.insured_area,
             "attribute" : self.attribute,
             "second_attribute": self.second_attribute,
             "poverty_state" : self.poverty_state,
@@ -51,7 +49,6 @@ class InsuredData2020(db.Model):
     own_expense = db.Column(db.Float)
     pay_date = db.Column(db.DateTime)
     insured_state = db.Column(db.Enum(*EnumerateData.insured_state))
-    insured_area = db.Column(db.Enum(*EnumerateData.insured_area))
     attribute = db.Column(db.Enum(*EnumerateData.attribute))
     second_attribute = db.Column(db.Enum(*EnumerateData.second_attribute))
     poverty_state = db.Column(db.Enum(*EnumerateData.poverty_state))
@@ -69,7 +66,6 @@ class InsuredData2020(db.Model):
             "own_expense": self.own_expense,
             "pay_date": to_string_date(self.pay_date),
             "insured_state" : self.insured_state,
-            "insured_area" : self.insured_area,
             "attribute" : self.attribute,
             "second_attribute": self.second_attribute,
             "poverty_state" : self.poverty_state,
@@ -86,7 +82,6 @@ class InsuredData2021(db.Model):
     own_expense = db.Column(db.Float)
     pay_date = db.Column(db.DateTime)
     insured_state = db.Column(db.Enum(*EnumerateData.insured_state))
-    insured_area = db.Column(db.Enum(*EnumerateData.insured_area))
     attribute = db.Column(db.Enum(*EnumerateData.attribute))
     second_attribute = db.Column(db.Enum(*EnumerateData.second_attribute))
     poverty_state = db.Column(db.Enum(*EnumerateData.poverty_state))
@@ -104,7 +99,6 @@ class InsuredData2021(db.Model):
             "own_expense": self.own_expense,
             "pay_date": to_string_date(self.pay_date),
             "insured_state" : self.insured_state,
-            "insured_area" : self.insured_area,
             "attribute" : self.attribute,
             "second_attribute": self.second_attribute,
             "poverty_state" : self.poverty_state,
@@ -121,7 +115,6 @@ class InsuredData2022(db.Model):
     own_expense = db.Column(db.Float)
     pay_date = db.Column(db.DateTime)
     insured_state = db.Column(db.Enum(*EnumerateData.insured_state))
-    insured_area = db.Column(db.Enum(*EnumerateData.insured_area))
     attribute = db.Column(db.Enum(*EnumerateData.attribute))
     second_attribute = db.Column(db.Enum(*EnumerateData.second_attribute))
     poverty_state = db.Column(db.Enum(*EnumerateData.poverty_state))
@@ -139,7 +132,6 @@ class InsuredData2022(db.Model):
             "own_expense": self.own_expense,
             "pay_date": to_string_date(self.pay_date),
             "insured_state" : self.insured_state,
-            "insured_area" : self.insured_area,
             "attribute" : self.attribute,
             "second_attribute": self.second_attribute,
             "poverty_state" : self.poverty_state,
@@ -156,7 +148,6 @@ class InsuredData2023(db.Model):
     own_expense = db.Column(db.Float)
     pay_date = db.Column(db.DateTime)
     insured_state = db.Column(db.Enum(*EnumerateData.insured_state))
-    insured_area = db.Column(db.Enum(*EnumerateData.insured_area))
     attribute = db.Column(db.Enum(*EnumerateData.attribute))
     second_attribute = db.Column(db.Enum(*EnumerateData.second_attribute))
     poverty_state = db.Column(db.Enum(*EnumerateData.poverty_state))
@@ -174,7 +165,6 @@ class InsuredData2023(db.Model):
             "own_expense": self.own_expense,
             "pay_date": to_string_date(self.pay_date),
             "insured_state" : self.insured_state,
-            "insured_area" : self.insured_area,
             "attribute" : self.attribute,
             "second_attribute": self.second_attribute,
             "poverty_state" : self.poverty_state,
