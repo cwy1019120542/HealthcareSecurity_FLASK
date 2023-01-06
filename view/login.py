@@ -20,7 +20,7 @@ class Login(Base):
         user = self.query.first()
         if not user or not user.is_available:
             abort(401)
-        data = user.data_response()
+        data = user.dict_response()
         for key, value in data.items():
             session[key] = value
         self.response = OK(data)

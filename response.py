@@ -1,6 +1,30 @@
+import openpyxl
+from uuid import uuid1
 from json import dumps
-from flask import Response, jsonify
+from flask import Response, jsonify, make_response
 from config import Config
+
+class ExcelResponse(Response):
+
+    j_status = 200
+
+    def __init__(self, data_group_list, *args, **kwargs):
+        wb = openpyxl.Workbook()
+        sheet = wb[wb.sheetnames[0]]
+        for data_group in data_group_list:
+            try:
+                sheet.append(data_group)
+            except:
+                print(data_group)
+                continue
+        file_name = f'{uuid1()}.xlsx'
+        header = {
+            "Content-Disposition": f'attachment; filename={file_name}',
+            'Content-Type': 'application/x-xlsx',
+            'file_name': file_name
+        }
+        super().__init__(openpyxl.writer.excel.save_virtual_workbook(wb), self.j_status, header, *args, **kwargs)
+
 
 class JsonResponse(Response):
 

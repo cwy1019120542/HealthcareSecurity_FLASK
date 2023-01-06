@@ -9,4 +9,4 @@ class EnumerateData(views.MethodView):
     }
 
     def get(self):
-        return OK(ED.data_response())
+        return OK(ED.dict_response())

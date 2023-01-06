@@ -19,6 +19,8 @@ class Base(views.MethodView):
         self.query = None
         self.user_id = None
         self.response = OK({})
+        self.response_data = {}
+        self.year = None
         super().__init__(*args, **kwargs)
 
     def filter_parameter(self):
@@ -86,6 +88,23 @@ class Base(views.MethodView):
         if self.model_name not in session['authority'] and '*' not in session['authority']:
             abort(403)
 
+    def get_file_name(self):
+        file_name_list = []
+        print(self.parameter_dict)
+        for key1, value1 in self.parameter_dict.items():
+            if isinstance(value1, dict):
+                for key2, value2 in value1.items():
+                    if isinstance(value2, list):
+                        file_name_list.append('_'.join(values2))
+                    else:
+                        file_name_list.append(value2)
+            else:
+                if isinstance(value1, list):
+                    file_name_list.append('_'.join(value1))
+                else:
+                    file_name_list.append(value1)
+        return '、'.join(file_name_list)
+
     def get_query_parameter(self, parameter_dict):
         filter_parameter_list = []
         for key, value in parameter_dict.items():
@@ -114,8 +133,8 @@ class Base(views.MethodView):
             self.authentication()
         self.filter_parameter()
         if self.is_year:
-            year = self.parameter_dict.pop('year')
-            self.model = model_dict[f'{self.model_name}_{year}']
+            self.year = self.parameter_dict.pop('year')
+            self.model = model_dict[f'{self.model_name}_{self.year}']
         else:
             self.model = model_dict[self.model_name]
         self.query = self.model.query
@@ -140,15 +159,22 @@ class Base(views.MethodView):
 
 class BaseList(Base):
 
+    is_page = True
+    response_type = 'dict_response'
+
     def make_response(self):
         page = self.parameter_dict.pop("page", 1)
         limit = self.parameter_dict.pop("limit", 7)
         super().make_response()
         offset = (page - 1) * limit
         data_count = self.query.count()
-        data_list = [i.data_response(i_index) for i_index, i in
-                     enumerate(self.query.offset(offset).limit(limit).all(), offset + 1)]
-        self.response = OKPage(data_list, data_count, page, limit)
+        if self.is_page:
+            self.query = self.query.offset(offset).limit(limit)
+        else:
+            if data_count > 50000:
+                abort(400)
+        self.response_data = [getattr(i, self.response_type)(i_index) for i_index, i in enumerate(self.query.all(), offset + 1)]
+        self.response = OKPage(self.response_data, data_count, page, limit)
 
 
 

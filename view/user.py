@@ -19,4 +19,4 @@ class Password(Base):
             abort(400)
         user.password = self.parameter_dict['new_password']
         db.session.commit()
-        self.response = user.data_response()
+        self.response = user.dict_response()

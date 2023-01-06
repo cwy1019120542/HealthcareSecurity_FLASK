@@ -9,7 +9,7 @@ class Config:
     Access_Control_Allow_Origin = '*'
     PERMANENT_SESSION_LIFETIME = timedelta(days=3)
     SESSION_COOKIE_NAME = "HealthcareSecurity"
-    DEFAULT_YEAR = '2022'
+    DEFAULT_YEAR = '2023'
 
 class EnumerateData:
     attribute = ('农村特困供养', '城市特困供养', '农村低保', '城市低保', '一般居民')
@@ -48,9 +48,10 @@ class EnumerateData:
     hospital_community = ('市立医院', '中医院')
     pay_exists_dict = {'统筹基金': 'overall_pay', '大额医疗': 'large_pay', '大病保险': 'big_pay', '医疗救助': 'rescue_pay', '公务员医疗补助': 'civil_pay', '其他基金': 'other_pay', '基金支付总额': 'all_pay', '个人现金': 'cash_pay', '个人账户': 'account_pay', '账户共济': 'together_pay'}
     pay_exists = tuple(pay_exists_dict.keys())
+    own_expense_standard_dict = {'2019': 250, '2020': 250, '2021': 280, '2022': 320, '2023': 350}
 
     @classmethod
-    def data_response(cls):
+    def dict_response(cls):
         return {
             "attribute": cls.attribute,
             "second_attribute": cls.second_attribute,
