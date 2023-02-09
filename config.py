@@ -12,10 +12,13 @@ class Config:
     DEFAULT_YEAR = '2023'
 
 class EnumerateData:
-    attribute = ('农村特困供养', '城市特困供养', '农村低保', '城市低保', '一般居民')
-    second_attribute = ('孤儿', '重点优抚对象', '重度残疾人', '事实无人抚养儿童', '肇事肇祸精神病人', '无')
+    civil_attribute = ('农村特困供养', '城市特困供养', '农村低保', '城市低保', '低保边缘户')
+    poverty_state = ('监测户', '稳定脱贫人口', '致贫返贫人口', '贫困人口')
+    orphan_attribute = ('孤儿', '事实无人抚养儿童')
+    disable_attribute = ('重度残疾人',)
+    treat_attribute = ('重点优抚对象',)
+    accident_attribute = ('肇事肇祸精神病人',)
     insured_state = ('本地居民', '本地职工', '异地居民', '异地职工', '死亡', '失联', '动态新增', '参军', '服刑', '自愿放弃', '其他')
-    poverty_state = ('监测户', '稳定脱贫人口', '致贫返贫人口', '不贫困', '贫困人口')
     town_village_dict = {
         '梅城镇': ('七里村', '万岭村', '东关社区', '凤凰村', '利民村', '北街村', '北街社区', '双塘村', '太平村', '平桥村', '彭岭村', '彰法山社区', '新桃园社区', '模范村', '河庄村', '河湾村', '潘铺村', '舒苑社区', '蔬菜村', '高集村', '龙井社区', '其他'),
         '源潭镇': ('三妙村', '三河村', '东畈村', '东红村', '光辉村', '友爱村', '双峰居委会', '双林村', '叶典村', '斗塘村', '杨泗村', '棋盘村', '永济村', '源潭村', '田墩村', '赵冲村', '路口村', '其他', '长和村', '其他'),
@@ -43,9 +46,20 @@ class EnumerateData:
     pay_place = ('本地', '市内异地', '省内异地', '跨省异地', '中心', '互联网医院', '中心附属医疗机构', '其他')
     hospital_level = ('三级特等', '三级甲等', '三级乙等', '三级丙等', '二级甲等', '二级乙等', '二级丙等', '一级甲等', '一级乙等', '一级丙等', '无等级', '其他')
     evidence_type = ('居民身份证', '社会保障卡', '医保电子凭证', '终端扫脸', '其他')
-    cure_type =('药店购药', '普通门诊', '两病门诊', '双通道购药', '普通住院', '无法确定他方责任的意外伤害（外伤住院）', '转外诊治住院', '急诊转住院', '单病种住院', '日间手术', '生育门诊（产前检查）', '生育住院', '计生生育门诊', '同病同保障住院', '床日费用住院', '门诊慢性病', '门诊特殊病', '计划生育住院', '门诊单病种', '大额普通门诊', '残疾人辅助器具', '日间病床', '无他方责任意外伤害住院', '分疗程间断住院治疗', '18周岁以下苯丙酮尿症', '18周岁以下四氢生物蝶呤缺乏症', '18周岁以下苯丙酮尿症以及四氢生物蝶呤缺乏症', '其他')
     year = ('2019', '2020', '2021', '2022', '2023')
-    hospital_community = ('市立医院', '中医院')
+    hospital_community_dict = {
+        '市立医院': ('黄柏镇', '槎水镇', '源潭镇', '余井镇', '梅城镇', '官庄镇', '塔畈乡', '龙潭乡'),
+        '中医院': ('水吼镇', '黄铺镇', '王河镇', '油坝乡', '黄泥镇', '五庙乡', '痘姆乡', '天柱山镇', '开发区')
+    }
+    hospital_community = tuple(hospital_community_dict.keys())
+    cure_type_dict = {
+        '住院': ('普通住院', '无法确定他方责任的意外伤害（外伤住院）', '转外诊治住院', '急诊转住院', '单病种住院', '日间手术', '生育住院', '同病同保障住院', '床日费用住院', '计划生育住院', '日间病床', '无他方责任意外伤害住院', '分疗程间断住院治疗'),
+        '慢特病': ('门诊慢性病', '门诊特殊病', '双通道购药', '门诊单病种'),
+        '门诊': ('普通门诊', '两病门诊', '生育门诊（产前检查）', '计生生育门诊', '大额普通门诊'),
+        '其他': ('药店购药', '残疾人辅助器具', '18周岁以下苯丙酮尿症', '18周岁以下四氢生物蝶呤缺乏症', '18周岁以下苯丙酮尿症以及四氢生物蝶呤缺乏症', '其他')
+    }
+    cure_type = tuple(j for i in cure_type_dict.values() for j in i)
+    cure_type_gather = tuple(cure_type_dict.keys())
     pay_exists_dict = {'统筹基金': 'overall_pay', '大额医疗': 'large_pay', '大病保险': 'big_pay', '医疗救助': 'rescue_pay', '公务员医疗补助': 'civil_pay', '其他基金': 'other_pay', '基金支付总额': 'all_pay', '个人现金': 'cash_pay', '个人账户': 'account_pay', '账户共济': 'together_pay'}
     pay_exists = tuple(pay_exists_dict.keys())
     own_expense_standard_dict = {'2019': 250, '2020': 250, '2021': 280, '2022': 320, '2023': 350}
@@ -53,18 +67,28 @@ class EnumerateData:
     @classmethod
     def dict_response(cls):
         return {
-            "attribute": cls.attribute,
-            "second_attribute": cls.second_attribute,
+            "attribute_dict": {
+                'civil_attribute': cls.civil_attribute,
+                'poverty_state': cls.poverty_state,
+                'orphan_attribute': cls.orphan_attribute,
+                'disable_attribute': cls.disable_attribute,
+                'treat_attribute': cls.treat_attribute,
+                'accident_attribute': cls.accident_attribute,
+            },
             "insured_state": cls.insured_state,
-            "poverty_state": cls.poverty_state,
             "town_village_dict": cls.town_village_dict,
+            'town': cls.town,
+            'village': cls.village,
             'person_type': cls.person_type,
             'pay_place': cls.pay_place,
             'hospital_level': cls.hospital_level,
             'evidence_type': cls.evidence_type,
+            'cure_type_dict': cls.cure_type_dict,
             'cure_type': cls.cure_type,
             'year': cls.year,
+            'hospital_community_dict': cls.hospital_community_dict,
             'hospital_community': cls.hospital_community,
             'default_year': Config.DEFAULT_YEAR,
             'pay_exists': cls.pay_exists,
+            'cure_type_gather': cls.cure_type_gather,
         }

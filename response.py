@@ -8,14 +8,14 @@ class ExcelResponse(Response):
 
     j_status = 200
 
-    def __init__(self, data_group_list, *args, **kwargs):
+    def __init__(self, data_group_list, header, *args, **kwargs):
         wb = openpyxl.Workbook()
         sheet = wb[wb.sheetnames[0]]
+        sheet.append(header)
         for data_group in data_group_list:
             try:
                 sheet.append(data_group)
             except:
-                print(data_group)
                 continue
         file_name = f'{uuid1()}.xlsx'
         header = {
@@ -42,21 +42,13 @@ class JsonResponse(Response):
             header.update(extra_header)
         super().__init__(dumps(response_data, indent=2, separators=(", ", ": ")) + "\n", self.j_status, header, mimetype="application/json", *args, **kwargs)
 
-class OKPage(JsonResponse):
-
-    j_status = 200
-    message = "OK"
-
-    def __init__(self, data, data_count, page, limit, *args, **kwargs):
-        super().__init__({"data": data, "data_count": data_count, "page": page, "limit": limit}, *args, **kwargs)
-
 class OK(JsonResponse):
 
     j_status = 200
     message = "OK"
 
-    def __init__(self, data, *args, **kwargs):
-        super().__init__({"data": data}, *args, **kwargs)
+    def __init__(self, data, extra_data={}, *args, **kwargs):
+        super().__init__({"data": data, **extra_data}, *args, **kwargs)
 
 class Created(JsonResponse):
 

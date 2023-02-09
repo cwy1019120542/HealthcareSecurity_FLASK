@@ -9,7 +9,7 @@ class Password(Base):
     methods = ['put']
     model_name = "user"
     allowed_parameter = {
-        "PUT": {'old_password': (str, 20), 'new_password': (str, 20)},
+        "PUT": {'old_password': (str, 20, 'user', True), 'new_password': (str, 20, 'user', True)},
     }
     is_year = False
 
@@ -19,4 +19,3 @@ class Password(Base):
             abort(400)
         user.password = self.parameter_dict['new_password']
         db.session.commit()
-        self.response = user.dict_response()

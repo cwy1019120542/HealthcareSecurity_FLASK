@@ -8,14 +8,22 @@ class InsuredData(Base):
 
     methods = ['get']
     model_name = "insured_data"
+    join_model_name = 'person'
+    entities_dict = {'model': ['id_number', 'own_expense', 'pay_date', 'insured_state', 'is_civil', 'remark'], 'join_model': ['name', 'civil_attribute', 'poverty_state', 'orphan_attribute', 'disable_attribute', 'treat_attribute', 'accident_attribute', 'town', 'village', 'phone_number']}
     allowed_parameter = {
-        "GET": {'year': ("enum", None), 'name': (str, 20), "id_number": (str, 18), "is_insured": (bool, None),
-                "own_expense": ("enum", None), "pay_date": ("date", None),
-                "insured_state": ("enum", None), "attribute": ("enum", 'or_'), "second_attribute": ("enum", 'or_'),
-                "poverty_state": ("enum", 'or_'),
-                "town": ("enum", None), "village": ("enum", None), "page": (int, None)},
+        "GET": {
+            "id_number": (str, 18, 'insured_data', False), "pay_date": ("date", None, 'insured_data', False), "insured_state": ("enum", None, 'insured_data', False), "is_civil": (bool, None, 'insured_data', False),'name': (str, 20, "person", False),
+            "civil_attribute": ("enum", 'or_', "person", False), "orphan_attribute": ("enum", 'or_', "person", False), "disable_attribute": ("enum", 'or_', "person", False), "treat_attribute": ("enum", 'or_', "person", False),
+            "accident_attribute": ("enum", 'or_', "person", False), "poverty_state": ("enum", 'or_', "person", False), "town": ("enum", None, "person", False), "village": ("enum", None, "person", False),'year': ("enum", None, '', True),
+            "page": (int, None, '', False)}
     }
 
+    def clean_response(self):
+        super().clean_response()
+        for data_group in self.response_data:
+            data_group['pay_date'] = self.to_string_date(data_group['pay_date'])
+            data_group['attribute'] = self.merge_attribute(data_group)
+            data_group['is_civil'] = self.bool_to_string(data_group['is_civil'])
 
 class InsuredDataList(InsuredData, BaseList):
 
@@ -24,10 +32,12 @@ class InsuredDataList(InsuredData, BaseList):
 class InsuredDataStatistic(InsuredData):
 
     def make_response(self):
-        own_expense_standard = EnumerateData.own_expense_standard_dict[self.year]
         self.query = self.query.with_entities(func.count(self.model.id), self.model.own_expense)
         self.parameter_dict.pop('page', None)
         super().make_response()
+
+    def clean_response(self):
+        own_expense_standard = EnumerateData.own_expense_standard_dict[self.year]
         result_list = self.query.group_by(self.model.own_expense).all()
         result_dict = {'all_count': 0, 'insured_count':0, 'not_insured_count': 0, 'perk_count': 0, 'own_expense': 0, 'perk': 0}
         for result in result_list:
@@ -42,24 +52,22 @@ class InsuredDataStatistic(InsuredData):
                 result_dict['perk_count'] += result_count
                 result_dict['perk'] += (own_expense_standard-result_own_expense) * result_count
         self.response_data = result_dict
-        self.response = OK(result_dict)
-
-
 
 class InsuredDataListDownload(InsuredDataList):
 
     is_page = False
-    response_type = 'list_response'
+    response_type_dict = {'GET': ExcelResponse}
 
-    def make_response(self):
-        super().make_response()
-        self.response_data.insert(0, ['序号', 'id', '姓名', '身份证号', '自付金额', '支付日期', '参保情况', '人员属性', '其他属性', '贫困状态', '乡镇', '村', '手机号', '备注'])
-        self.response = ExcelResponse(self.response_data)
+    def clean_response(self):
+        super().clean_response()
+        self.response_data = (tuple(i.values()) for i in self.response_data)
+        self.extra_response_data = ['序号', '身份证号', '自付金额', '支付日期', '参保情况', '是否参加公务员医疗补助', '备注', '姓名','乡镇', '村', '手机号', '人员属性']
 
 class InsuredDataStatisticDownload(InsuredDataStatistic):
 
-    def make_response(self):
-        super().make_response()
-        data_group_list = [['总（人）', '参加居民医保（人）', '未参加居民医保（人）', '享受参保资助（人）', '自付金额（元）', '资助金额（元）']]
-        data_group_list.append([*self.response_data.values()])
-        self.response = ExcelResponse(data_group_list)
+    response_type_dict = {'GET': ExcelResponse}
+
+    def clean_response(self):
+        super().clean_response()
+        self.response_data = [tuple(self.response_data.values())]
+        self.extra_response_data = ['总（人）', '参加居民医保（人）', '未参加居民医保（人）', '享受参保资助（人）', '自付金额（元）', '资助金额（元）']
