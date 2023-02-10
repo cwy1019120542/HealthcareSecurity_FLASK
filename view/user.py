@@ -15,7 +15,7 @@ class Password(Base):
 
     def make_response(self):
         user = self.query.filter_by(id=self.user_id).first()
-        if not user or user.password != self.parameter_dict['old_password']:
+        if not user or user.password != self.parameter_dict[self.model_name]['old_password']:
             abort(400)
-        user.password = self.parameter_dict['new_password']
+        user.password = self.parameter_dict[self.model_name]['new_password']
         db.session.commit()
