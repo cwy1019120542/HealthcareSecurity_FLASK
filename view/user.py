@@ -13,7 +13,7 @@ class Password(Base):
     }
     is_year = False
 
-    def make_response(self):
+    def make_query(self):
         user = self.query.filter_by(id=self.user_id).first()
         if not user or user.password != self.parameter_dict[self.model_name]['old_password']:
             abort(400)

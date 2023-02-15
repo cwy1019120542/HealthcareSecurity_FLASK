@@ -11,7 +11,7 @@ class SettleData(Base):
     methods = ['get']
     model_name = "settle_data"
     join_model_name = 'person'
-    entities_dict = {'model': ['id', 'settle_id', 'cure_id', 'self_number', 'id_number', 'person_type', 'pay_place', 'hospital_id', 'hospital_name', 'hospital_level', 'hospital_place', 'start_date', 'end_date', 'settle_date', 'evidence_type', 'all_expense', 'self_expense', 'over_expense', 'first_expense', 'inner_expense', 'start_pay', 'overall_pay', 'large_pay', 'big_pay', 'rescue_pay', 'civil_pay', 'other_pay', 'all_pay', 'cash_pay', 'account_pay', 'together_pay', 'illness_name', 'cure_type'],
+    entities_dict = {'model': ['id', 'settle_id', 'cure_id', 'self_number', 'id_number', 'person_type', 'hospital_id', 'hospital_name', 'hospital_level', 'hospital_place', 'is_centre', 'start_date', 'end_date', 'settle_date', 'evidence_type', 'all_expense', 'self_expense', 'over_expense', 'first_expense', 'inner_expense', 'start_pay', 'overall_pay', 'large_pay', 'big_pay', 'rescue_pay', 'civil_pay', 'other_pay', 'all_pay', 'cash_pay', 'account_pay', 'together_pay', 'illness_name', 'cure_type'],
                      'join_model': ['name', 'civil_attribute', 'poverty_state', 'orphan_attribute', 'disable_attribute',
                                     'treat_attribute', 'accident_attribute', 'town', 'village',
                                     'phone_number']}
@@ -19,7 +19,7 @@ class SettleData(Base):
         "GET": {'name': (str, 20, "person", False), "civil_attribute": ("enum", 'or_', "person", False), "orphan_attribute": ("enum", 'or_', "person", False),
             "disable_attribute": ("enum", 'or_', "person", False), "treat_attribute": ("enum", 'or_', "person", False),"accident_attribute": ("enum", 'or_', "person", False),
             "poverty_state": ("enum", 'or_', "person", False), "town": ("enum", None, "person", False), "village": ("enum", None, "person", False),'year': ("enum", None, '', True),
-            "page": (int, None, '', False), "person_type": ("enum", None, 'settle_data', False), "pay_place": ("enum", None, 'settle_data', False), "hospital_level": ("enum", None, 'settle_data', False),
+            "page": (int, None, '', False), "person_type": ("enum", None, 'settle_data', False), "hospital_place": ("enum", None, 'settle_data', False), "hospital_level": ("enum", None, 'settle_data', False), 'is_centre': (bool, None, 'settle_data', False),
             "evidence_type": ("enum", None, 'settle_data', False), "cure_type": ("enum", None, 'settle_data', False), "settle_date": ("date", None, 'settle_data', False), "pay_exists": ("enum", None, 'settle_data', False)
         }
     }
@@ -34,7 +34,7 @@ class SettleData(Base):
             deal_dict[f'{pay_exists_key}!'] = 0
         return deal_dict
     
-    def extra_make_response(self):
+    def extra_make_query(self):
         pay_exists_list = self.parameter_dict.get(self.model_name, {}).pop('pay_exists', None)
         if pay_exists_list:
             if isinstance(pay_exists_list, list):
@@ -50,6 +50,7 @@ class SettleData(Base):
             for key in ('start_date', 'end_date', 'settle_date'):
                 data_group[key] = self.to_string_date(data_group[key])
             data_group['attribute'] = self.merge_attribute(data_group)
+            data_group['is_centre'] = self.bool_to_string(data_group['is_centre'])
 
 class SettleDataList(BaseList, SettleData):
 
@@ -58,11 +59,11 @@ class SettleDataList(BaseList, SettleData):
 
 class SettleDataStatistic(SettleData):
 
-    def make_response(self):
+    def make_query(self):
         self.query = self.query.with_entities(func.count(self.model.id), func.count(distinct(self.model.id_number)), func.sum(self.model.all_expense), func.sum(self.model.inner_expense), func.sum(self.model.overall_pay), func.sum(self.model.large_pay), func.sum(self.model.big_pay), func.sum(self.model.rescue_pay),
                                                 func.sum(self.model.civil_pay), func.sum(self.model.other_pay), func.sum(self.model.all_pay), func.sum(self.model.cash_pay), func.sum(self.model.account_pay), func.sum(self.model.together_pay))
         self.parameter_dict.pop('page', None)
-        super().make_response()
+        super().make_query()
 
     def clean_response(self):
         result = self.query.first()

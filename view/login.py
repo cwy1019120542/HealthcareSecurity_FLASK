@@ -18,8 +18,8 @@ class Login(Base):
     is_authentication = False
     has_entities = True
 
-    def make_response(self):
-        super().make_response()
+    def make_query(self):
+        super().make_query()
         self.response_data = self.query.all()
         if not self.response_data or not self.response_data[0].is_available:
             abort(401)

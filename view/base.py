@@ -45,8 +45,14 @@ class Base(views.MethodView):
         return ', '.join(value_list)
 
     @staticmethod
-    def to_float(data):
-        return round(float(data), 2) if data else 0
+    def to_float(data, is_percent=False):
+        if isinstance(data, tuple):
+            data = data[0] / data[1]
+        if is_percent:
+            data = f'{round(data*100, 2)}%' if data else '0%'
+        else:
+            data = round(float(data), 2) if data else 0
+        return data
 
     @staticmethod
     def to_string_date(date):
@@ -152,15 +158,15 @@ class Base(views.MethodView):
             filter_parameter_list.append(filter_parameter)
         return filter_parameter_list
 
-    def extra_make_response(self):
+    def extra_make_query(self):
         pass
 
-    def make_response(self):
+    def make_query(self):
         main_parameter_dict = self.parameter_dict.get(self.model_name)
         join_parameter_dict = self.parameter_dict.get(self.join_model_name)
         if self.join_model_name:
             self.query = self.query.join(self.join_model, self.model.id_number==self.join_model.id_number)
-        self.extra_make_response()
+        self.extra_make_query()
         for model, parameter_dict in ((self.model, main_parameter_dict), (self.join_model, join_parameter_dict)):
             if not parameter_dict:
                 continue
@@ -187,7 +193,7 @@ class Base(views.MethodView):
         self.query = self.model.query
         if self.has_entities:
             self.query = self.query.with_entities(*self.entities_list)
-        self.make_response()
+        self.make_query()
         self.clean_response()
 
     def clean_response(self):
@@ -198,7 +204,6 @@ class Base(views.MethodView):
                 data_dict = {'number': offset + data_index}
                 for key in data_group.keys():
                     data_dict[key] = getattr(data_group, key)
-
                 response_data.append(data_dict)
             self.response_data = response_data
 
@@ -225,8 +230,8 @@ class BaseList(Base):
     is_page = True
     has_entities = True
 
-    def make_response(self):
-        super().make_response()
+    def make_query(self):
+        super().make_query()
         page = self.parameter_dict.get("page", 1)
         limit = 10
         offset = (page - 1) * limit
@@ -235,7 +240,7 @@ class BaseList(Base):
             self.query = self.query.offset(offset).limit(limit)
         else:
             if data_count > 50000:
-                abort(400)
+                abort(413)
         self.response_data = self.query.all()
         self.extra_response_data = {'data_count': data_count, 'page': page, 'limit': limit, 'offset': offset}
 

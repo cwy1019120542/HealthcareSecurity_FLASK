@@ -110,11 +110,10 @@ class SettleData2019(db.Model):
     name = db.Column(db.String(20))
     id_number = db.Column(db.String(18))
     person_type = db.Column(db.Enum(*EnumerateData.person_type))
-    pay_place = db.Column(db.Enum(*EnumerateData.pay_place))
     hospital_id = db.Column(db.String(20))
     hospital_name = db.Column(db.String(50))
     hospital_level = db.Column(db.Enum(*EnumerateData.hospital_level))
-    hospital_place = db.Column(db.String(6))
+    hospital_place = db.Column(db.Enum(*EnumerateData.hospital_place))
     start_date = db.Column(db.DateTime)
     end_date = db.Column(db.DateTime)
     settle_date = db.Column(db.DateTime)
@@ -138,6 +137,7 @@ class SettleData2019(db.Model):
     illness_name = db.Column(db.String(70))
     cure_type = db.Column(db.Enum(*EnumerateData.cure_type))
     overall_percent = db.Column(DOUBLE)
+    is_centre = db.Column(db.Boolean)
 
 class SettleData2020(db.Model):
     __tablename__ = "settle_data_2020"
@@ -148,11 +148,10 @@ class SettleData2020(db.Model):
     name = db.Column(db.String(20))
     id_number = db.Column(db.String(18))
     person_type = db.Column(db.Enum(*EnumerateData.person_type))
-    pay_place = db.Column(db.Enum(*EnumerateData.pay_place))
     hospital_id = db.Column(db.String(20))
     hospital_name = db.Column(db.String(50))
     hospital_level = db.Column(db.Enum(*EnumerateData.hospital_level))
-    hospital_place = db.Column(db.String(6))
+    hospital_place = db.Column(db.Enum(*EnumerateData.hospital_place))
     start_date = db.Column(db.DateTime)
     end_date = db.Column(db.DateTime)
     settle_date = db.Column(db.DateTime)
@@ -176,6 +175,7 @@ class SettleData2020(db.Model):
     illness_name = db.Column(db.String(70))
     cure_type = db.Column(db.Enum(*EnumerateData.cure_type))
     overall_percent = db.Column(DOUBLE)
+    is_centre = db.Column(db.Boolean)
 
 class SettleData2021(db.Model):
     __tablename__ = "settle_data_2021"
@@ -186,11 +186,10 @@ class SettleData2021(db.Model):
     name = db.Column(db.String(20))
     id_number = db.Column(db.String(18))
     person_type = db.Column(db.Enum(*EnumerateData.person_type))
-    pay_place = db.Column(db.Enum(*EnumerateData.pay_place))
     hospital_id = db.Column(db.String(20))
     hospital_name = db.Column(db.String(50))
     hospital_level = db.Column(db.Enum(*EnumerateData.hospital_level))
-    hospital_place = db.Column(db.String(6))
+    hospital_place = db.Column(db.Enum(*EnumerateData.hospital_place))
     start_date = db.Column(db.DateTime)
     end_date = db.Column(db.DateTime)
     settle_date = db.Column(db.DateTime)
@@ -214,6 +213,7 @@ class SettleData2021(db.Model):
     illness_name = db.Column(db.String(70))
     cure_type = db.Column(db.Enum(*EnumerateData.cure_type))
     overall_percent = db.Column(DOUBLE)
+    is_centre = db.Column(db.Boolean)
 
 class SettleData2022(db.Model):
     __tablename__ = "settle_data_2022"
@@ -224,11 +224,10 @@ class SettleData2022(db.Model):
     name = db.Column(db.String(20))
     id_number = db.Column(db.String(18))
     person_type = db.Column(db.Enum(*EnumerateData.person_type))
-    pay_place = db.Column(db.Enum(*EnumerateData.pay_place))
     hospital_id = db.Column(db.String(20))
     hospital_name = db.Column(db.String(50))
     hospital_level = db.Column(db.Enum(*EnumerateData.hospital_level))
-    hospital_place = db.Column(db.String(6))
+    hospital_place = db.Column(db.Enum(*EnumerateData.hospital_place))
     start_date = db.Column(db.DateTime)
     end_date = db.Column(db.DateTime)
     settle_date = db.Column(db.DateTime)
@@ -252,6 +251,7 @@ class SettleData2022(db.Model):
     illness_name = db.Column(db.String(70))
     cure_type = db.Column(db.Enum(*EnumerateData.cure_type))
     overall_percent = db.Column(DOUBLE)
+    is_centre = db.Column(db.Boolean)
 
 
 class SettleData2023(db.Model):
@@ -263,11 +263,10 @@ class SettleData2023(db.Model):
     name = db.Column(db.String(20))
     id_number = db.Column(db.String(18))
     person_type = db.Column(db.Enum(*EnumerateData.person_type))
-    pay_place = db.Column(db.Enum(*EnumerateData.pay_place))
     hospital_id = db.Column(db.String(20))
     hospital_name = db.Column(db.String(50))
     hospital_level = db.Column(db.Enum(*EnumerateData.hospital_level))
-    hospital_place = db.Column(db.String(6))
+    hospital_place = db.Column(db.Enum(*EnumerateData.hospital_place))
     start_date = db.Column(db.DateTime)
     end_date = db.Column(db.DateTime)
     settle_date = db.Column(db.DateTime)
@@ -291,6 +290,7 @@ class SettleData2023(db.Model):
     illness_name = db.Column(db.String(70))
     cure_type = db.Column(db.Enum(*EnumerateData.cure_type))
     overall_percent = db.Column(DOUBLE)
+    is_centre = db.Column(db.Boolean)
 
 
 model_dict = {

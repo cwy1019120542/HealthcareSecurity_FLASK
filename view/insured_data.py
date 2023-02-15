@@ -1,7 +1,7 @@
 from .base import BaseList, Base
 from flask import session
 from response import ExcelResponse, OK
-from config import EnumerateData
+from config import StaticData
 from sqlalchemy.sql import func
 
 class InsuredData(Base):
@@ -31,13 +31,13 @@ class InsuredDataList(InsuredData, BaseList):
 
 class InsuredDataStatistic(InsuredData):
 
-    def make_response(self):
+    def make_query(self):
         self.query = self.query.with_entities(func.count(self.model.id), self.model.own_expense)
         self.parameter_dict.pop('page', None)
-        super().make_response()
+        super().make_query()
 
     def clean_response(self):
-        own_expense_standard = EnumerateData.own_expense_standard_dict[self.year]
+        own_expense_standard = StaticData.own_expense_standard_dict[self.year]
         result_list = self.query.group_by(self.model.own_expense).all()
         result_dict = {'all_count': 0, 'insured_count':0, 'not_insured_count': 0, 'perk_count': 0, 'own_expense': 0, 'perk': 0}
         for result in result_list:

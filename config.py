@@ -43,10 +43,10 @@ class EnumerateData:
     authority = {'管理员': ('*', ), '医保局': ('insured_data', 'user', 'settle_data'), '政府': ('insured_data', 'user')}
     identity = tuple(authority.keys())
     person_type = ('居民', '职工')
-    pay_place = ('本地', '市内异地', '省内异地', '跨省异地', '中心', '互联网医院', '中心附属医疗机构', '其他')
+    hospital_place = ('本地', '市内异地', '省内异地', '跨省异地')
     hospital_level = ('三级特等', '三级甲等', '三级乙等', '三级丙等', '二级甲等', '二级乙等', '二级丙等', '一级甲等', '一级乙等', '一级丙等', '无等级', '其他')
     evidence_type = ('居民身份证', '社会保障卡', '医保电子凭证', '终端扫脸', '其他')
-    year = ('2019', '2020', '2021', '2022', '2023')
+    year = ('2022', '2023')
     hospital_community_dict = {
         '市立医院': ('黄柏镇', '槎水镇', '源潭镇', '余井镇', '梅城镇', '官庄镇', '塔畈乡', '龙潭乡'),
         '中医院': ('水吼镇', '黄铺镇', '王河镇', '油坝乡', '黄泥镇', '五庙乡', '痘姆乡', '天柱山镇', '开发区')
@@ -62,7 +62,6 @@ class EnumerateData:
     cure_type_gather = tuple(cure_type_dict.keys())
     pay_exists_dict = {'统筹基金': 'overall_pay', '大额医疗': 'large_pay', '大病保险': 'big_pay', '医疗救助': 'rescue_pay', '公务员医疗补助': 'civil_pay', '其他基金': 'other_pay', '基金支付总额': 'all_pay', '个人现金': 'cash_pay', '个人账户': 'account_pay', '账户共济': 'together_pay'}
     pay_exists = tuple(pay_exists_dict.keys())
-    own_expense_standard_dict = {'2019': 250, '2020': 250, '2021': 280, '2022': 320, '2023': 350}
 
     @classmethod
     def dict_response(cls):
@@ -80,7 +79,7 @@ class EnumerateData:
             'town': cls.town,
             'village': cls.village,
             'person_type': cls.person_type,
-            'pay_place': cls.pay_place,
+            'hospital_place': cls.hospital_place,
             'hospital_level': cls.hospital_level,
             'evidence_type': cls.evidence_type,
             'cure_type_dict': cls.cure_type_dict,
@@ -92,3 +91,10 @@ class EnumerateData:
             'pay_exists': cls.pay_exists,
             'cure_type_gather': cls.cure_type_gather,
         }
+
+class StaticData:
+    own_expense_standard_dict = {'2019': 250, '2020': 250, '2021': 280, '2022': 320, '2023': 350}
+    town_target_dict = {
+        '2022': {'王河镇': 51666, '黄铺镇': 46684, '梅城镇': 74255, '官庄镇': 27433, '油坝乡': 19668, '塔畈乡': 19343, '黄柏镇': 14159, '天柱山镇': 12440, '黄泥镇': 19209, '源潭镇': 60820, '龙潭乡': 18516, '痘姆乡': 17630, '余井镇': 54932, '五庙乡': 10174, '槎水镇': 31963, '开发区': 11898, '水吼镇': 30404},
+        '2023': {'槎水镇': 30993, '痘姆乡': 17129, '水吼镇': 29477, '官庄镇': 26445, '黄柏镇': 13470, '塔畈乡': 18773, '天柱山镇': 12244, '王河镇': 49752, '五庙乡': 9746, '油坝乡': 18946, '开发区': 11448, '龙潭乡': 17870, '余井镇': 52951, '梅城镇': 72615, '源潭镇': 59217, '黄铺镇': 45276, '黄泥镇': 18587},
+    }
