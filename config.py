@@ -18,7 +18,12 @@ class EnumerateData:
     disable_attribute = ('重度残疾人',)
     treat_attribute = ('重点优抚对象',)
     accident_attribute = ('肇事肇祸精神病人',)
-    insured_state = ('本地居民', '本地职工', '异地居民', '异地职工', '死亡', '失联', '动态新增', '参军', '服刑', '自愿放弃', '其他')
+    attribute_gather_dict = {
+        '应保尽保人群': ('农村特困供养', '城市特困供养', '农村低保', '城市低保', '监测户', '稳定脱贫人口', '致贫返贫人口', '孤儿', '事实无人抚养儿童', '肇事肇祸精神病人'),
+        '参保资助人群': ('农村特困供养', '城市特困供养', '农村低保', '城市低保', '监测户', '致贫返贫人口', '孤儿', '事实无人抚养儿童', '重度残疾人', '重点优抚对象')
+    }
+    attribute_gather = tuple(attribute_gather_dict.keys())
+    insured_state = ('本地居民', '本地职工', '异地居民', '异地职工', '死亡', '失联', '参军', '服刑', '其他')
     town_village_dict = {
         '梅城镇': ('七里村', '万岭村', '东关社区', '凤凰村', '利民村', '北街村', '北街社区', '双塘村', '太平村', '平桥村', '彭岭村', '彰法山社区', '新桃园社区', '模范村', '河庄村', '河湾村', '潘铺村', '舒苑社区', '蔬菜村', '高集村', '龙井社区', '其他'),
         '源潭镇': ('三妙村', '三河村', '东畈村', '东红村', '光辉村', '友爱村', '双峰居委会', '双林村', '叶典村', '斗塘村', '杨泗村', '棋盘村', '永济村', '源潭村', '田墩村', '赵冲村', '路口村', '其他', '长和村', '其他'),
@@ -40,7 +45,7 @@ class EnumerateData:
         '其他': ('其他', ),}
     town = tuple(town_village_dict.keys())
     village = tuple(set(j for i in town_village_dict.values() for j in i))
-    authority = {'管理员': ('*', ), '医保局': ('insured_data', 'user', 'settle_data'), '政府': ('insured_data', 'user')}
+    authority = {'管理员': ('*', ), '医保局': ('insured_data', 'settle_data'), '政府': ('insured_data')}
     identity = tuple(authority.keys())
     person_type = ('居民', '职工')
     hospital_place = ('本地', '市内异地', '省内异地', '跨省异地')
@@ -90,6 +95,8 @@ class EnumerateData:
             'default_year': Config.DEFAULT_YEAR,
             'pay_exists': cls.pay_exists,
             'cure_type_gather': cls.cure_type_gather,
+            'attribute_gather_dict': cls.attribute_gather_dict,
+            'attribute_gather': cls.attribute_gather,
         }
 
 class StaticData:

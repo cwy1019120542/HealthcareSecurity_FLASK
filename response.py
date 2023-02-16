@@ -61,12 +61,12 @@ class Created(JsonResponse):
 class BadRequest(JsonResponse):
 
     j_status = 400
-    message = "请求失败，请确认参数后重试"
+    message = "BadRequest"
 
 class Unauthorized(JsonResponse):
 
     j_status = 401
-    message = "身份认证失败，请重新登录"
+    message = "Unauthorized"
 
 class Forbidden(JsonResponse):
 
@@ -96,7 +96,7 @@ class InternalServerError(JsonResponse):
 class  RequestEntityTooLarge(JsonResponse):
 
     j_status = 413
-    message = "数据量过大，请分段下载"
+    message = "RequestEntityTooLarge"
 
 def return_error(error_class):
     def error(e):

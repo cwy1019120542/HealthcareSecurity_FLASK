@@ -45,14 +45,15 @@ class Base(views.MethodView):
         return ', '.join(value_list)
 
     @staticmethod
-    def to_float(data, is_percent=False):
+    def to_float(data, number=2):
         if isinstance(data, tuple):
-            data = data[0] / data[1]
-        if is_percent:
-            data = f'{round(data*100, 2)}%' if data else '0%'
-        else:
-            data = round(float(data), 2) if data else 0
+            data = data[0] / data[1] if data[1] else 0
+        data = round(float(data), number) if data else 0
         return data
+
+    @staticmethod
+    def to_percent(data):
+        return f'{round(data * 100, 2)}%' if data else '0%'
 
     @staticmethod
     def to_string_date(date):
@@ -116,7 +117,7 @@ class Base(views.MethodView):
                         abort(400)
                     self.generate_parameter_dict(model_name, key, value)
         session_town = session.get('town')
-        if session_town and self.is_authentication:
+        if 'town' in allowed_parameter_dict and session_town and self.is_authentication:
             if 'town' not in self.parameter_dict['person'] or self.parameter_dict['person']['town']!=session_town:
                 abort(400)
 
