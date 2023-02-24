@@ -18,6 +18,8 @@ class InsuredData(Base):
             "page": (int, None, '', False)}
     }
 
+class InsuredDataList(BaseList, InsuredData):
+
     def clean_response(self):
         super().clean_response()
         for data_group in self.response_data:
@@ -25,15 +27,10 @@ class InsuredData(Base):
             data_group['attribute'] = self.merge_attribute(data_group)
             data_group['is_civil'] = self.bool_to_string(data_group['is_civil'])
 
-class InsuredDataList(InsuredData, BaseList):
-
-    pass
-
 class InsuredDataStatistic(InsuredData):
 
     def make_query(self):
         self.query = self.query.with_entities(func.count(self.model.id), self.model.own_expense)
-        self.parameter_dict.pop('page', None)
         super().make_query()
 
     def clean_response(self):

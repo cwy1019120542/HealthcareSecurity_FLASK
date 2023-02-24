@@ -2,7 +2,7 @@ from view.insured_data import InsuredDataList, InsuredDataStatistic, InsuredData
 from view.enumerate_data import EnumerateData
 from view.insured_rate import InsuredRate, SpecialInsuredRate
 from view.login import Login
-from view.settle_data import SettleDataList, SettleDataStatistic, SettleDataListDownload, SettleDataStatisticDownload
+from view.settle_data import SettleDataList, SettleDataStatistic, SettleDataListDownload, SettleDataStatisticDownload, SettleDataMerge, SettleDataMergeDownload
 from view.user import Password
 route_dict = {
     InsuredDataList: "/api/user/<int:user_id>/insured_data/list",
@@ -18,4 +18,6 @@ route_dict = {
     Password: '/api/user/<int:user_id>/password',
     InsuredRate: '/api/user/<int:user_id>/insured_rate/',
     SpecialInsuredRate: '/api/user/<int:user_id>/special_insured_rate',
+    SettleDataMerge: '/api/user/<int:user_id>/settle_data/merge',
+    SettleDataMergeDownload: '/api/user/<int:user_id>/settle_data/merge/download',
 }

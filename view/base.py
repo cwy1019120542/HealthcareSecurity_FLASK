@@ -14,7 +14,6 @@ class Base(views.MethodView):
     is_authentication = True
     is_year = True
     is_page = False
-    has_entities = False
     entities_dict = {'model': [], 'join_model': []}
     response_type_dict = {'GET': OK, 'POST': OK, 'PUT': OK, 'DELETE': OK}
     method_dict = {"GET": "args", "POST": "form", "PUT": "form"}
@@ -23,7 +22,6 @@ class Base(views.MethodView):
         self.parameter_dict = {}
         self.model = None
         self.method = None
-        self.year_model_name = None
         self.join_model = model_dict.get(self.join_model_name)
         self.query = None
         self.user_id = None
@@ -32,7 +30,6 @@ class Base(views.MethodView):
         self.extra_response_data = {}
         self.response = None
         self.year = None
-        self.entities_list = []
         super().__init__(*args, **kwargs)
 
     @staticmethod
@@ -50,6 +47,12 @@ class Base(views.MethodView):
             data = data[0] / data[1] if data[1] else 0
         data = round(float(data), number) if data else 0
         return data
+
+    @staticmethod
+    def fill_field(data_group, field_list):
+        for field in field_list:
+            data_group[field] = ''
+
 
     @staticmethod
     def to_percent(data):
@@ -86,14 +89,14 @@ class Base(views.MethodView):
                 continue
             value_type, remark, model_name, *extra = allowed_parameter_dict[key]
             if value_type == "enum":
-                value_split = value.split('_')
+                value_split = value.split('|')
                 for value_single in value_split:
                     if value_single not in getattr(EnumerateData, key):
                         abort(400)
                 value_split = value_split if len(value_split) > 1 else value_split[0]
                 self.generate_parameter_dict(model_name, key, value_split, remark)
             elif value_type == 'date':
-                value_split = value.split('_')
+                value_split = value.split('|')
                 if len(value_split) < 2:
                     abort(400)
                 start_date = datetime.strptime(f'{value_split[0]}-01 00:00:00', '%Y-%m-%d %H:%M:%S')
@@ -159,15 +162,9 @@ class Base(views.MethodView):
             filter_parameter_list.append(filter_parameter)
         return filter_parameter_list
 
-    def extra_make_query(self):
-        pass
-
     def make_query(self):
         main_parameter_dict = self.parameter_dict.get(self.model_name)
         join_parameter_dict = self.parameter_dict.get(self.join_model_name)
-        if self.join_model_name:
-            self.query = self.query.join(self.join_model, self.model.id_number==self.join_model.id_number)
-        self.extra_make_query()
         for model, parameter_dict in ((self.model, main_parameter_dict), (self.join_model, join_parameter_dict)):
             if not parameter_dict:
                 continue
@@ -175,7 +172,6 @@ class Base(views.MethodView):
             if or_dict:
                 self.query = self.query.filter(or_(*self.get_query_parameter(model, or_dict)))
             self.query = self.query.filter(*self.get_query_parameter(model, parameter_dict))
-
 
     def deal_request(self, user_id):
         self.method = request.method
@@ -186,28 +182,29 @@ class Base(views.MethodView):
         self.filter_parameter()
         if self.is_year:
             self.year = self.parameter_dict.get('year', Config.DEFAULT_YEAR)
-            self.year_model_name = f'{self.model_name}_{self.year}'
-            self.model = model_dict[self.year_model_name]
+            self.model = model_dict[f'{self.model_name}_{self.year}']
         else:
             self.model = model_dict[self.model_name]
-        self.entities_list = [*(getattr(self.model, i) for i in self.entities_dict.get('model', [])), *(getattr(self.join_model, i) for i in self.entities_dict.get('join_model', []))]
         self.query = self.model.query
-        if self.has_entities:
-            self.query = self.query.with_entities(*self.entities_list)
+        if self.join_model_name:
+            self.query = self.query.join(self.join_model, self.model.id_number==self.join_model.id_number)
+        if self.entities_dict['model']:
+            self.query = self.query.with_entities(*(getattr(self.model, i) for i in self.entities_dict.get('model', [])), *(getattr(self.join_model, i) for i in self.entities_dict.get('join_model', [])))
         self.make_query()
         self.clean_response()
 
     def clean_response(self):
-        if self.has_entities:
-            offset = self.extra_response_data.get('offset', 0)
-            response_data = []
-            for data_index, data_group in enumerate(self.response_data, 1):
-                data_dict = {'number': offset + data_index}
-                for key in data_group.keys():
-                    data_dict[key] = getattr(data_group, key)
-                response_data.append(data_dict)
-            self.response_data = response_data
-
+        self.response_data = self.query.all()
+        response_data = []
+        offset = self.extra_response_data.get('offset')
+        for data_index, data_group in enumerate(self.response_data, 1):
+            data_dict = {}
+            if offset!=None:
+                data_dict['number'] = offset + data_index
+            for key in data_group.keys():
+                data_dict[key] = getattr(data_group, key)
+            response_data.append(data_dict)
+        self.response_data = response_data
 
     def get(self, user_id=None):
         self.deal_request(user_id)
@@ -229,20 +226,18 @@ class Base(views.MethodView):
 class BaseList(Base):
 
     is_page = True
-    has_entities = True
 
-    def make_query(self):
-        super().make_query()
+    def clean_response(self):
         page = self.parameter_dict.get("page", 1)
         limit = 10
         offset = (page - 1) * limit
         data_count = self.query.count()
+        self.extra_response_data = {'data_count': data_count, 'page': page, 'limit': limit, 'offset': offset}
         if self.is_page:
             self.query = self.query.offset(offset).limit(limit)
         else:
-            if data_count > 50000:
+            if data_count > 25000:
                 abort(413)
-        self.response_data = self.query.all()
-        self.extra_response_data = {'data_count': data_count, 'page': page, 'limit': limit, 'offset': offset}
+        super().clean_response()
 
 

@@ -65,8 +65,12 @@ class EnumerateData:
     }
     cure_type = tuple(j for i in cure_type_dict.values() for j in i)
     cure_type_gather = tuple(cure_type_dict.keys())
-    pay_exists_dict = {'统筹基金': 'overall_pay', '大额医疗': 'large_pay', '大病保险': 'big_pay', '医疗救助': 'rescue_pay', '公务员医疗补助': 'civil_pay', '其他基金': 'other_pay', '基金支付总额': 'all_pay', '个人现金': 'cash_pay', '个人账户': 'account_pay', '账户共济': 'together_pay'}
-    pay_exists = tuple(pay_exists_dict.keys())
+    pay_type_dict = {'统筹基金': 'overall_pay', '大额医疗': 'large_pay', '大病保险': 'big_pay', '医疗救助': 'rescue_pay', '公务员医疗补助': 'civil_pay', '其他基金': 'other_pay', '基金支付总额': 'all_pay', '个人现金': 'cash_pay', '个人账户': 'account_pay', '账户共济': 'together_pay'}
+    pay_type_label = tuple(pay_type_dict.keys())
+    pay_type = tuple(pay_type_dict.values())
+    pay_type_operator_dict = {'大于': '__gt__', '小于': '__lt__', '等于': '__eq__'}
+    pay_type_operator_label = tuple(pay_type_operator_dict.keys())
+    pay_type_operator = tuple(pay_type_operator_dict.values())
 
     @classmethod
     def dict_response(cls):
@@ -93,10 +97,13 @@ class EnumerateData:
             'hospital_community_dict': cls.hospital_community_dict,
             'hospital_community': cls.hospital_community,
             'default_year': Config.DEFAULT_YEAR,
-            'pay_exists': cls.pay_exists,
+            'pay_type_dict': cls.pay_type_dict,
+            'pay_type_label': cls.pay_type_label,
             'cure_type_gather': cls.cure_type_gather,
             'attribute_gather_dict': cls.attribute_gather_dict,
             'attribute_gather': cls.attribute_gather,
+            'pay_type_operator_dict': cls.pay_type_operator_dict,
+            'pay_type_operator_label': cls.pay_type_operator_label,
         }
 
 class StaticData:
