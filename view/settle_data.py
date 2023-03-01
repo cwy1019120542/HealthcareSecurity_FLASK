@@ -20,7 +20,8 @@ class SettleData(Base):
             "disable_attribute": ("enum", 'or_', "person", False), "treat_attribute": ("enum", 'or_', "person", False),"accident_attribute": ("enum", 'or_', "person", False),
             "poverty_state": ("enum", 'or_', "person", False), "town": ("enum", None, "person", False), "village": ("enum", None, "person", False),'year': ("enum", None, '', True),
             "page": (int, None, '', False), "person_type": ("enum", None, 'settle_data', False), "hospital_place": ("enum", None, 'settle_data', False), "hospital_level": ("enum", None, 'settle_data', False), 'is_centre': (bool, None, 'settle_data', False),
-            "evidence_type": ("enum", None, 'settle_data', False), "cure_type": ("enum", None, 'settle_data', False), "settle_date": ("date", None, 'settle_data', False), "pay_type": ("enum", None, 'settle_data', False), "pay_type_operator": ("enum", None, 'settle_data', False), "pay_type_value": (int, None, 'settle_data', False)
+            "evidence_type": ("enum", None, 'settle_data', False), "cure_type": ("enum", None, 'settle_data', False), "settle_date": ("date", None, 'settle_data', False),
+            "pay_type": ("enum", None, 'settle_data', False), "pay_type_operator": ("enum", None, 'settle_data', False), "pay_type_value": (int, None, 'settle_data', False), "hospital_name": (str, 50, "settle_data", False),
         }
     }
     decimal_field_list = ('all_expense', 'self_expense', 'over_expense', 'first_expense', 'inner_expense', 'start_pay', 'overall_pay', 'large_pay', 'big_pay', 'rescue_pay', 'civil_pay', 'other_pay', 'all_pay', 'cash_pay', 'account_pay', 'together_pay')

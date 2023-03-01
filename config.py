@@ -23,7 +23,7 @@ class EnumerateData:
         '参保资助人群': ('农村特困供养', '城市特困供养', '农村低保', '城市低保', '监测户', '致贫返贫人口', '孤儿', '事实无人抚养儿童', '重度残疾人', '重点优抚对象')
     }
     attribute_gather = tuple(attribute_gather_dict.keys())
-    insured_state = ('本地居民', '本地职工', '异地居民', '异地职工', '死亡', '失联', '参军', '服刑', '其他')
+    insured_state = ('本地居民', '本地职工', '异地居民', '异地职工', '死亡', '失联', '参军', '服刑', '自愿放弃', '其他')
     town_village_dict = {
         '梅城镇': ('七里村', '万岭村', '东关社区', '凤凰村', '利民村', '北街村', '北街社区', '双塘村', '太平村', '平桥村', '彭岭村', '彰法山社区', '新桃园社区', '模范村', '河庄村', '河湾村', '潘铺村', '舒苑社区', '蔬菜村', '高集村', '龙井社区', '其他'),
         '源潭镇': ('三妙村', '三河村', '东畈村', '东红村', '光辉村', '友爱村', '双峰居委会', '双林村', '叶典村', '斗塘村', '杨泗村', '棋盘村', '永济村', '源潭村', '田墩村', '赵冲村', '路口村', '其他', '长和村', '其他'),
@@ -90,7 +90,6 @@ class EnumerateData:
             'person_type': cls.person_type,
             'hospital_place': cls.hospital_place,
             'hospital_level': cls.hospital_level,
-            'evidence_type': cls.evidence_type,
             'cure_type_dict': cls.cure_type_dict,
             'cure_type': cls.cure_type,
             'year': cls.year,
