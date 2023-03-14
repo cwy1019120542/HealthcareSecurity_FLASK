@@ -2,10 +2,6 @@ from extension import db
 from sqlalchemy.dialects.mysql import DOUBLE
 from config import EnumerateData
 
-
-
-
-
 def clean_illness_name(illness_name):
     return illness_name.replace('�?', '').replace('\x00', '') if illness_name else ''
 
@@ -27,6 +23,7 @@ class Person(db.Model):
 class InsuredData2019(db.Model):
     __tablename__ = "insured_data_2019"
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    self_number = db.Column(db.String(30))
     id_number = db.Column(db.String(18), unique=True)
     own_expense = db.Column(db.Integer)
     pay_date = db.Column(db.DateTime)
@@ -37,6 +34,7 @@ class InsuredData2019(db.Model):
 class InsuredData2020(db.Model):
     __tablename__ = "insured_data_2020"
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    self_number = db.Column(db.String(30))
     id_number = db.Column(db.String(18), unique=True)
     own_expense = db.Column(db.Integer)
     pay_date = db.Column(db.DateTime)
@@ -48,6 +46,7 @@ class InsuredData2020(db.Model):
 class InsuredData2021(db.Model):
     __tablename__ = "insured_data_2021"
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    self_number = db.Column(db.String(30))
     id_number = db.Column(db.String(18), unique=True)
     own_expense = db.Column(db.Integer)
     pay_date = db.Column(db.DateTime)
@@ -59,6 +58,7 @@ class InsuredData2021(db.Model):
 class InsuredData2022(db.Model):
     __tablename__ = "insured_data_2022"
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    self_number = db.Column(db.String(30))
     id_number = db.Column(db.String(18), unique=True)
     own_expense = db.Column(db.Integer)
     pay_date = db.Column(db.DateTime)
@@ -70,6 +70,7 @@ class InsuredData2022(db.Model):
 class InsuredData2023(db.Model):
     __tablename__ = "insured_data_2023"
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    self_number = db.Column(db.String(30))
     id_number = db.Column(db.String(18), unique=True)
     own_expense = db.Column(db.Integer)
     pay_date = db.Column(db.DateTime)

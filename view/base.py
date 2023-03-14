@@ -187,7 +187,7 @@ class Base(views.MethodView):
             self.model = model_dict[self.model_name]
         self.query = self.model.query
         if self.join_model_name:
-            self.query = self.query.join(self.join_model, self.model.id_number==self.join_model.id_number)
+            self.query = self.query.outerjoin(self.join_model, self.model.id_number==self.join_model.id_number)
         if self.entities_dict['model']:
             self.query = self.query.with_entities(*(getattr(self.model, i) for i in self.entities_dict.get('model', [])), *(getattr(self.join_model, i) for i in self.entities_dict.get('join_model', [])))
         self.make_query()
