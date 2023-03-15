@@ -20,6 +20,11 @@ class InsuredRate(Base):
     def clean_response(self):
         result_list = self.query.all()
         self.response_data = []
+        town_list = [i[0] for i in result_list]
+        if None in town_list:
+            none_number = result_list.pop(town_list.index(None))[1]
+            other_index = town_list.index('其他')
+            result_list[other_index] = ('其他', result_list[other_index][1]+none_number)
         for town, data_count in result_list:
             target = StaticData.town_target_dict[self.year].get(town, 0)
             town_dict = {'town': town, 'target': target, 'data_count': data_count, 'percent': self.to_float((data_count, target), 4)}
@@ -32,6 +37,9 @@ class InsuredRate(Base):
             data['percent'] = self.to_percent(data['percent'])
             all_target +=  data['target']
             all_count += data['data_count']
+            if data['town'] == '其他':
+                data['target'] = '——'
+                data['percent'] = '——'
         self.response_data.append({'number': '', 'town': '合计', 'target': all_target, 'data_count': all_count, 'percent': self.to_percent(self.to_float((all_count, all_target), 4))})
 
 class SpecialInsuredRate(Base):
