@@ -12,7 +12,7 @@ class Config:
     DEFAULT_YEAR = '2023'
 
 class EnumerateData:
-    civil_attribute = ('农村特困供养', '城市特困供养', '农村低保', '城市低保', '低保边缘户')
+    civil_attribute = ('农村特困供养', '城市特困供养', '农村低保', '城市低保', '农村低保边缘', '城市低保边缘')
     poverty_state = ('监测户', '稳定脱贫人口', '致贫返贫人口', '贫困人口')
     orphan_attribute = ('孤儿', '事实无人抚养儿童')
     disable_attribute = ('重度残疾人',)

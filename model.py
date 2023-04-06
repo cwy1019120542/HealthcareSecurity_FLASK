@@ -139,6 +139,7 @@ class SettleData2019(db.Model):
     cure_type = db.Column(db.Enum(*EnumerateData.cure_type))
     overall_percent = db.Column(DOUBLE)
     is_centre = db.Column(db.Boolean)
+    operator = db.Column(db.String(20))
 
 class SettleData2020(db.Model):
     __tablename__ = "settle_data_2020"
@@ -177,6 +178,7 @@ class SettleData2020(db.Model):
     cure_type = db.Column(db.Enum(*EnumerateData.cure_type))
     overall_percent = db.Column(DOUBLE)
     is_centre = db.Column(db.Boolean)
+    operator = db.Column(db.String(20))
 
 class SettleData2021(db.Model):
     __tablename__ = "settle_data_2021"
@@ -215,6 +217,7 @@ class SettleData2021(db.Model):
     cure_type = db.Column(db.Enum(*EnumerateData.cure_type))
     overall_percent = db.Column(DOUBLE)
     is_centre = db.Column(db.Boolean)
+    operator = db.Column(db.String(20))
 
 class SettleData2022(db.Model):
     __tablename__ = "settle_data_2022"
@@ -253,6 +256,7 @@ class SettleData2022(db.Model):
     cure_type = db.Column(db.Enum(*EnumerateData.cure_type))
     overall_percent = db.Column(DOUBLE)
     is_centre = db.Column(db.Boolean)
+    operator = db.Column(db.String(20))
 
 
 class SettleData2023(db.Model):
@@ -292,6 +296,7 @@ class SettleData2023(db.Model):
     cure_type = db.Column(db.Enum(*EnumerateData.cure_type))
     overall_percent = db.Column(DOUBLE)
     is_centre = db.Column(db.Boolean)
+    operator = db.Column(db.String(20))
 
 
 model_dict = {

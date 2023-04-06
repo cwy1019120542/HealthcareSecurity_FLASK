@@ -51,7 +51,7 @@ class SettleDataList(BaseList, SettleData):
 class SettleDataMerge(BaseList, SettleData):
 
     def make_query(self):
-        self.query = self.query.with_entities(func.count(self.model.id).label('data_count'), self.model.id_number, *(getattr(self.join_model, i) for i in self.entities_dict['join_model']), *(func.sum(getattr(self.model, i)).label(i) for i in self.decimal_field_list)).group_by(self.model.id_number)
+        self.query = self.query.with_entities(func.count(self.model.id).label('data_count'), self.model.id_number, *(getattr(self.join_model, i) for i in self.entities_dict['join_model']), *(func.sum(getattr(self.model, i)).label(i) for i in self.decimal_field_list)).filter(self.model.operator!='胡玉敏').group_by(self.model.id_number)
         pay_type = self.parameter_dict.get(self.model_name, {}).pop('pay_type', None)
         pay_type_operator = self.parameter_dict.get(self.model_name, {}).pop('pay_type_operator', None)
         pay_type_value = self.parameter_dict.get(self.model_name, {}).pop('pay_type_value', None)
