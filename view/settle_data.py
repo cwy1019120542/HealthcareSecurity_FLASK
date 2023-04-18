@@ -24,7 +24,7 @@ class SettleData(Base):
             "pay_type": ("enum", None, 'settle_data', False), "pay_type_operator": ("enum", None, 'settle_data', False), "pay_type_value": (int, None, 'settle_data', False), "hospital_name": (str, 50, "settle_data", False),
         }
     }
-    decimal_field_list = ('all_expense', 'self_expense', 'over_expense', 'first_expense', 'inner_expense', 'start_pay', 'overall_pay', 'large_pay', 'big_pay', 'rescue_pay', 'civil_pay', 'other_pay', 'all_pay', 'cash_pay', 'account_pay', 'together_pay')
+    decimal_field_list = ('all_expense', 'self_expense', 'over_expense', 'first_expense', 'inner_expense', 'start_pay', 'overall_pay', 'large_pay', 'big_pay', 'rescue_pay', 'civil_pay', 'other_pay', 'all_pay', 'cash_pay', 'account_pay', 'together_pay', 'overall_percent')
     
     def make_query(self):
         pay_type = self.parameter_dict.get(self.model_name, {}).pop('pay_type', None)
@@ -45,6 +45,7 @@ class SettleDataList(BaseList, SettleData):
                 data_group[key] = self.to_string_date(data_group[key])
             data_group['attribute'] = self.merge_attribute(data_group)
             data_group['is_centre'] = self.bool_to_string(data_group['is_centre'])
+        print(data_group)
 
 
 
