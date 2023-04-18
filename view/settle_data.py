@@ -45,7 +45,6 @@ class SettleDataList(BaseList, SettleData):
                 data_group[key] = self.to_string_date(data_group[key])
             data_group['attribute'] = self.merge_attribute(data_group)
             data_group['is_centre'] = self.bool_to_string(data_group['is_centre'])
-        print(data_group)
 
 
 
