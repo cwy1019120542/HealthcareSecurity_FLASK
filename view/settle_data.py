@@ -11,7 +11,7 @@ class SettleData(Base):
     methods = ['get']
     model_name = "settle_data"
     join_model_name = 'person'
-    entities_dict = {'model': ['id', 'settle_id', 'cure_id', 'self_number', 'id_number', 'person_type', 'hospital_id', 'hospital_name', 'hospital_level', 'hospital_place', 'is_centre', 'start_date', 'end_date', 'settle_date', 'evidence_type', 'all_expense', 'self_expense', 'over_expense', 'first_expense', 'inner_expense', 'start_pay', 'overall_pay', 'large_pay', 'big_pay', 'rescue_pay', 'civil_pay', 'other_pay', 'all_pay', 'cash_pay', 'account_pay', 'together_pay', 'illness_name', 'cure_type'],
+    entities_dict = {'model': ['id', 'settle_id', 'cure_id', 'self_number', 'id_number', 'person_type', 'hospital_id', 'hospital_name', 'hospital_level', 'hospital_place', 'start_date', 'end_date', 'settle_date', 'evidence_type', 'all_expense', 'self_expense', 'over_expense', 'first_expense', 'inner_expense', 'start_pay', 'overall_pay', 'large_pay', 'big_pay', 'rescue_pay', 'civil_pay', 'other_pay', 'all_pay', 'cash_pay', 'account_pay', 'together_pay', 'illness_name', 'cure_type', 'overall_percent', 'is_centre', 'operator'],
                      'join_model': ['name', 'civil_attribute', 'poverty_state', 'orphan_attribute', 'disable_attribute',
                                     'treat_attribute', 'accident_attribute', 'town', 'village',
                                     'phone_number']}
@@ -65,13 +65,13 @@ class SettleDataMerge(BaseList, SettleData):
             for key in self.decimal_field_list:
                 data_group[key] = self.to_float(data_group[key])
             data_group['attribute'] = self.merge_attribute(data_group)
-            self.fill_field(data_group, ('id', 'settle_id', 'cure_id', 'self_number', 'person_type', 'hospital_id', 'hospital_name', 'hospital_level', 'hospital_place', 'is_centre', 'start_date', 'end_date', 'settle_date', 'evidence_type', 'illness_name', 'cure_type'))
+            self.fill_field(data_group, ('id', 'settle_id', 'cure_id', 'self_number', 'person_type', 'hospital_id', 'hospital_name', 'hospital_level', 'hospital_place', 'start_date', 'end_date', 'settle_date', 'evidence_type', 'illness_name', 'cure_type', 'overall_percent', 'is_centre', 'operator'))
 
 class SettleDataStatistic(SettleData):
 
     def make_query(self):
         self.query = self.query.with_entities(func.count(self.model.id), func.count(distinct(self.model.id_number)), func.sum(self.model.all_expense), func.sum(self.model.inner_expense), func.sum(self.model.overall_pay), func.sum(self.model.large_pay), func.sum(self.model.big_pay), func.sum(self.model.rescue_pay),
-                                                func.sum(self.model.civil_pay), func.sum(self.model.other_pay), func.sum(self.model.all_pay), func.sum(self.model.cash_pay), func.sum(self.model.account_pay), func.sum(self.model.together_pay))
+                                                func.sum(self.model.civil_pay), func.sum(self.model.other_pay), func.sum(self.model.all_pay), func.sum(self.model.cash_pay), func.sum(self.model.account_pay), func.sum(self.model.together_pay)).filter(self.model.operator!='胡玉敏')
         super().make_query()
 
     def clean_response(self):
@@ -96,7 +96,7 @@ class SettleDataListDownload(SettleDataList):
     def clean_response(self):
         super().clean_response()
         self.response_data = (tuple(i.values()) for i in self.response_data)
-        self.extra_response_data = ['序号', 'id', '结算ID', '就诊ID', '个人编号', '证件号码', '人员类别', '定点医药机构编号', '定点医药机构名称', '医院等级', '医药机构地点类别', '中心报销', '开始日期', '结束日期', '结算日期', '就诊凭证类型', '总费用', '全自费金额', '超限价自费费用', '先行自付金额', '范围内费用', '起付线', '统筹基金支出', '大额医疗支出金额', '大病保险支出', '医疗救助支出', '公务员医疗补助', '其他基金支付', '基金支付总额', '个人现金支付', '个人账户支付', '账户共济支付金额', '病种名称', '医疗类别', '人员姓名', '乡镇', '村', '手机号', '人员属性']
+        self.extra_response_data = ['序号', 'id', '结算ID', '就诊ID', '个人编号', '证件号码', '人员类别', '定点医药机构编号', '定点医药机构名称', '医院等级', '医药机构地点类别', '开始日期', '结束日期', '结算日期', '就诊凭证类型', '总费用', '全自费金额', '超限价自费费用', '先行自付金额', '范围内费用', '起付线', '统筹基金支出', '大额医疗支出金额', '大病保险支出', '医疗救助支出', '公务员医疗补助', '其他基金支付', '基金支付总额', '个人现金支付', '个人账户支付', '账户共济支付金额', '病种名称', '医疗类别', '统筹基金支付比例', '中心报销', '经办人员', '人员姓名', '乡镇', '村', '手机号', '人员属性']
 
 class SettleDataStatisticDownload(SettleDataStatistic):
 
@@ -115,4 +115,4 @@ class SettleDataMergeDownload(SettleDataMerge):
     def clean_response(self):
         super().clean_response()
         self.response_data = (tuple(i.values()) for i in self.response_data)
-        self.extra_response_data = ['序号', '笔数', '证件号码', '人员姓名', '乡镇', '村', '手机号', '总费用', '全自费金额', '超限价自费费用', '先行自付金额', '范围内费用', '起付线', '统筹基金支出', '大额医疗支出金额', '大病保险支出', '医疗救助支出', '公务员医疗补助', '其他基金支付', '基金支付总额', '个人现金支付', '个人账户支付', '账户共济支付金额', '人员属性', 'id', '结算ID', '就诊ID', '个人编号', '人员类别', '定点医药机构编号', '定点医药机构名称', '医院等级', '医药机构地点类别', '中心报销', '开始日期', '结束日期', '结算日期', '就诊凭证类型', '病种名称', '医疗类别']
+        self.extra_response_data = ['序号', '笔数', '证件号码', '人员姓名', '乡镇', '村', '手机号', '总费用', '全自费金额', '超限价自费费用', '先行自付金额', '范围内费用', '起付线', '统筹基金支出', '大额医疗支出金额', '大病保险支出', '医疗救助支出', '公务员医疗补助', '其他基金支付', '基金支付总额', '个人现金支付', '个人账户支付', '账户共济支付金额', '人员属性', 'id', '结算ID', '就诊ID', '个人编号', '人员类别', '定点医药机构编号', '定点医药机构名称', '医院等级', '医药机构地点类别', '开始日期', '结束日期', '结算日期', '就诊凭证类型', '病种名称', '医疗类别', '统筹基金支付比例', '中心报销', '经办人员']
