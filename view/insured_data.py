@@ -9,10 +9,10 @@ class InsuredData(Base):
     methods = ['get']
     model_name = "insured_data"
     join_model_name = 'person'
-    entities_dict = {'model': ['id_number', 'own_expense', 'pay_date', 'insured_state', 'is_civil', 'remark'], 'join_model': ['name', 'civil_attribute', 'poverty_state', 'orphan_attribute', 'disable_attribute', 'treat_attribute', 'accident_attribute', 'town', 'village', 'phone_number']}
+    entities_dict = {'model': ['id_number', 'own_expense', 'pay_date', 'insured_state', 'is_civil', 'remark', 'is_account_pay'], 'join_model': ['name', 'civil_attribute', 'poverty_state', 'orphan_attribute', 'disable_attribute', 'treat_attribute', 'accident_attribute', 'town', 'village', 'phone_number']}
     allowed_parameter = {
         "GET": {
-            "id_number": (str, 18, 'insured_data', False), "pay_date": ("date", None, 'insured_data', False), "insured_state": ("enum", None, 'insured_data', False), "is_civil": (bool, None, 'insured_data', False),'name': (str, 20, "person", False),
+            "id_number": (str, 18, 'insured_data', False), "own_expense": (int, None, 'insured_data', False), "pay_date": ("date", None, 'insured_data', False), "insured_state": ("enum", None, 'insured_data', False), "is_civil": (bool, None, 'insured_data', False), "is_account_pay": (bool, None, 'insured_data', False),'name': (str, 20, "person", False),
             "civil_attribute": ("enum", 'or_', "person", False), "orphan_attribute": ("enum", 'or_', "person", False), "disable_attribute": ("enum", 'or_', "person", False), "treat_attribute": ("enum", 'or_', "person", False),
             "accident_attribute": ("enum", 'or_', "person", False), "poverty_state": ("enum", 'or_', "person", False), "town": ("enum", None, "person", False), "village": ("enum", None, "person", False),'year': ("enum", None, '', True),
             "page": (int, None, '', False)}
@@ -26,6 +26,7 @@ class InsuredDataList(BaseList, InsuredData):
             data_group['pay_date'] = self.to_string_date(data_group['pay_date'])
             data_group['attribute'] = self.merge_attribute(data_group)
             data_group['is_civil'] = self.bool_to_string(data_group['is_civil'])
+            data_group['is_account_pay'] = self.bool_to_string(data_group['is_account_pay'])
 
 class InsuredDataStatistic(InsuredData):
 
@@ -58,7 +59,7 @@ class InsuredDataListDownload(InsuredDataList):
     def clean_response(self):
         super().clean_response()
         self.response_data = (tuple(i.values()) for i in self.response_data)
-        self.extra_response_data = ['序号', '身份证号', '自付金额', '支付日期', '参保情况', '是否参加公务员医疗补助', '备注', '姓名','乡镇', '村', '手机号', '人员属性']
+        self.extra_response_data = ['序号', '身份证号', '自付金额', '支付日期', '参保情况', '是否参加公务员医疗补助', '备注', '是否共济缴费', '姓名','乡镇', '村', '手机号', '人员属性']
 
 class InsuredDataStatisticDownload(InsuredDataStatistic):
 
