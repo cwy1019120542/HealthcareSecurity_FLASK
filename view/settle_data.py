@@ -51,7 +51,7 @@ class SettleDataList(BaseList, SettleData):
 class SettleDataMerge(BaseList, SettleData):
 
     def make_query(self):
-        self.query = self.query.with_entities(func.count(self.model.id).label('data_count'), self.model.id_number, *(getattr(self.join_model, i) for i in self.entities_dict['join_model']), *(func.sum(getattr(self.model, i)).label(i) for i in self.decimal_field_list)).filter(self.model.operator!='胡玉敏').group_by(self.model.id_number)
+        self.query = self.query.with_entities(func.count(self.model.id).label('data_count'), self.model.id_number, *(getattr(self.join_model, i) for i in self.entities_dict['join_model']), *(func.sum(getattr(self.model, i)).label(i) for i in self.decimal_field_list)).group_by(self.model.id_number)
         pay_type = self.parameter_dict.get(self.model_name, {}).pop('pay_type', None)
         pay_type_operator = self.parameter_dict.get(self.model_name, {}).pop('pay_type_operator', None)
         pay_type_value = self.parameter_dict.get(self.model_name, {}).pop('pay_type_value', None)
@@ -71,7 +71,7 @@ class SettleDataStatistic(SettleData):
 
     def make_query(self):
         self.query = self.query.with_entities(func.count(self.model.id), func.count(distinct(self.model.id_number)), func.sum(self.model.all_expense), func.sum(self.model.inner_expense), func.sum(self.model.overall_pay), func.sum(self.model.large_pay), func.sum(self.model.big_pay), func.sum(self.model.rescue_pay),
-                                                func.sum(self.model.civil_pay), func.sum(self.model.other_pay), func.sum(self.model.all_pay), func.sum(self.model.cash_pay), func.sum(self.model.account_pay), func.sum(self.model.together_pay)).filter(self.model.operator!='胡玉敏')
+                                                func.sum(self.model.civil_pay), func.sum(self.model.other_pay), func.sum(self.model.all_pay), func.sum(self.model.cash_pay), func.sum(self.model.account_pay), func.sum(self.model.together_pay))
         super().make_query()
 
     def clean_response(self):
