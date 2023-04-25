@@ -1,8 +1,18 @@
-from flask import views
 from config import EnumerateData as ED
-from response import OK
+from .base import Base
 
-class EnumerateData(views.MethodView):
+class EnumerateData(Base):
+    allowed_parameter = {"GET": {
+            "enumerate_field": ("enum", None, '', True)}}
+    is_authentication = False
+    is_year = False
 
-    def get(self):
-        return OK(ED.dict_response())
+    def make_query(self):
+        pass
+
+    def clean_response(self):
+        enumerate_field = self.parameter_dict["enumerate_field"]
+        if isinstance(enumerate_field, str):
+            enumerate_field = [enumerate_field]
+        for key in enumerate_field:
+            self.response_data[key] = getattr(ED, key)

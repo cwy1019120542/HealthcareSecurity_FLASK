@@ -13,8 +13,7 @@ class InsuredRate(Base):
     }
 
     def make_query(self):
-        self.parameter_dict.setdefault(self.model_name, {})['insured_state'] = '本地居民'
-        self.query = self.query.with_entities(self.join_model.town, func.count(self.model.id)).group_by(self.join_model.town)
+        self.query = self.query.with_entities(self.join_model.town, func.count(self.model.id)).filter(self.model.own_expense!=None).group_by(self.join_model.town)
         super().make_query()
 
     def clean_response(self):

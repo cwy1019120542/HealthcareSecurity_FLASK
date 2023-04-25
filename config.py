@@ -12,18 +12,26 @@ class Config:
     DEFAULT_YEAR = '2023'
 
 class EnumerateData:
-    civil_attribute = ('农村特困供养', '城市特困供养', '农村低保', '城市低保', '农村低保边缘', '城市低保边缘')
-    poverty_state = ('监测户', '稳定脱贫人口', '致贫返贫人口', '贫困人口')
-    orphan_attribute = ('孤儿', '事实无人抚养儿童')
-    disable_attribute = ('重度残疾人',)
-    treat_attribute = ('重点优抚对象',)
-    accident_attribute = ('肇事肇祸精神病人',)
+    attribute_dict = {
+        'civil_attribute': ('农村特困供养', '城市特困供养', '农村低保', '城市低保', '农村低保边缘', '城市低保边缘'),
+        'poverty_state': ('监测户', '稳定脱贫人口', '致贫返贫人口', '贫困人口'),
+        'orphan_attribute': ('孤儿', '事实无人抚养儿童'),
+        'disable_attribute': ('重度残疾人',),
+        'treat_attribute': ('重点优抚对象',),
+        'accident_attribute': ('肇事肇祸精神病人',),
+    }
+    civil_attribute = attribute_dict['civil_attribute']
+    poverty_state = attribute_dict['poverty_state']
+    orphan_attribute = attribute_dict['orphan_attribute']
+    disable_attribute = attribute_dict['disable_attribute']
+    treat_attribute = attribute_dict['treat_attribute']
+    accident_attribute = attribute_dict['accident_attribute']
     attribute_gather_dict = {
         '应保尽保人群': ('农村特困供养', '城市特困供养', '农村低保', '城市低保', '监测户', '稳定脱贫人口', '致贫返贫人口', '孤儿', '事实无人抚养儿童', '肇事肇祸精神病人'),
         '参保资助人群': ('农村特困供养', '城市特困供养', '农村低保', '城市低保', '监测户', '致贫返贫人口', '孤儿', '事实无人抚养儿童', '重度残疾人', '重点优抚对象')
     }
     attribute_gather = tuple(attribute_gather_dict.keys())
-    insured_state = ('本地居民', '本地职工', '异地居民', '异地职工', '死亡', '失联', '参军', '服刑', '自愿放弃', '其他')
+    insured_state = ('本地居民', '本地职工', '异地居民', '异地职工', '死亡', '失联', '参军', '服刑', '动态新增', '自愿放弃', '其他')
     town_village_dict = {
         '梅城镇': ('七里村', '万岭村', '东关社区', '凤凰村', '利民村', '北街村', '北街社区', '双塘村', '太平村', '平桥村', '彭岭村', '彰法山社区', '新桃园社区', '模范村', '河庄村', '河湾村', '潘铺村', '舒苑社区', '蔬菜村', '高集村', '龙井社区', '其他'),
         '源潭镇': ('三妙村', '三河村', '东畈村', '东红村', '光辉村', '友爱村', '双峰居委会', '双林村', '叶典村', '斗塘村', '杨泗村', '棋盘村', '永济村', '源潭村', '田墩村', '赵冲村', '路口村', '其他', '长和村', '其他'),
@@ -71,39 +79,40 @@ class EnumerateData:
     pay_type_operator_dict = {'大于': '__gt__', '小于': '__lt__', '等于': '__eq__'}
     pay_type_operator_label = tuple(pay_type_operator_dict.keys())
     pay_type_operator = tuple(pay_type_operator_dict.values())
-
-    @classmethod
-    def dict_response(cls):
-        return {
-            "attribute_dict": {
-                'civil_attribute': cls.civil_attribute,
-                'poverty_state': cls.poverty_state,
-                'orphan_attribute': cls.orphan_attribute,
-                'disable_attribute': cls.disable_attribute,
-                'treat_attribute': cls.treat_attribute,
-                'accident_attribute': cls.accident_attribute,
-            },
-            "insured_state": cls.insured_state,
-            "town_village_dict": cls.town_village_dict,
-            'town': cls.town,
-            'village': cls.village,
-            'person_type': cls.person_type,
-            'hospital_place': cls.hospital_place,
-            'hospital_level': cls.hospital_level,
-            'cure_type_dict': cls.cure_type_dict,
-            'cure_type': cls.cure_type,
-            'year': cls.year,
-            'hospital_community_dict': cls.hospital_community_dict,
-            'hospital_community': cls.hospital_community,
-            'default_year': Config.DEFAULT_YEAR,
-            'pay_type_dict': cls.pay_type_dict,
-            'pay_type_label': cls.pay_type_label,
-            'cure_type_gather': cls.cure_type_gather,
-            'attribute_gather_dict': cls.attribute_gather_dict,
-            'attribute_gather': cls.attribute_gather,
-            'pay_type_operator_dict': cls.pay_type_operator_dict,
-            'pay_type_operator_label': cls.pay_type_operator_label,
+    check_dict = {
+        '加分': {
+            '信息报送': {'县级': 0.5, '市级': 1, '省级': 1.5, '中央级': 2}, '获奖': {'单位': 1}, '表彰': {'群众': 1}
+        },
+        '扣分': {
+            '不服从安排': {'单位': -5}, '空岗': {'单位': -1, '政务服务中心/群众': -2, '政府热线/市委监委': -3},
+            '聊天': {'单位': -1, '政务服务中心/群众': -2, '政府热线/市委监委': -3}, '吃东西': {'单位': -1, '政务服务中心/群众': -2, '政府热线/市委监委': -3},
+            '玩手机': {'单位': -1, '政务服务中心/群众': -2, '政府热线/市委监委': -3}, '手机未入柜': {'单位': -1},
+            '浏览非工作信息': {'单位': -1, '政务服务中心/群众': -2, '政府热线/市委监委': -3}, '不参加学习培训': {'单位': -1},
+            '未按时到岗': {'单位': -0.5}, '提前就餐': {'单位': -0.5, '政务服务中心/群众': -1.5},
+            '卫生不干净': {'单位': -0.5, '政务服务中心/群众': -1.5}, '未穿工作服': {'单位': -0.5, '政务服务中心/群众': -1.5},
+            '未打卡/迟到/早退': {'政务服务中心': -0.2}, '因私请假超10天': {'政务服务中心': -2},
+            '投诉': {'政务服务中心/群众': -2, '政府热线/市委监委': -4}, '短信评价8分以下': {'政务服务中心': -1},
+            '未按时完成工作': {'单位': -2}, '业务办理出错': {'单位': -2},
+            '测验低于60分': {'单位': -1}, '测验低于70分': {'单位': -0.5},
+            '严重违纪': {'单位': -50},
         }
+    }
+    operate_type = tuple(check_dict.keys())
+    check_type = []
+    check_source_list = []
+    for i in operate_type:
+        j_list = check_dict[i].keys()
+        check_type.extend(j_list)
+        for k in j_list:
+            check_source_list.extend(check_dict[i][k].keys())
+    check_source = tuple(set(check_source_list))
+    default_year = Config.DEFAULT_YEAR
+    department = ('征缴股', '审核股')
+    position = ('前台', '后台')
+    education = ('大专', '中专', '本科')
+    enumerate_field = ('attribute_dict', "insured_state", "town_village_dict", 'town', 'village', 'person_type', 'hospital_place', 'cure_type_dict', 'cure_type', 'year', 'hospital_community_dict', 'hospital_community',
+                  'default_year', 'pay_type_dict', 'pay_type_label', 'cure_type_gather', 'attribute_gather_dict', 'attribute_gather', 'pay_type_operator_dict', 'pay_type_operator_label',
+                       'check_dict', 'operate_type', 'check_type', 'check_source', 'hospital_level', 'department', 'position', 'education')
 
 class StaticData:
     own_expense_standard_dict = {'2019': 250, '2020': 250, '2021': 280, '2022': 320, '2023': 350}

@@ -149,6 +149,34 @@ class SettleData2023(db.Model):
     is_centre = db.Column(db.Boolean)
     operator = db.Column(db.String(20))
 
+class Staff(db.Model):
+    __tablename__ = "staff"
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    name = db.Column(db.String(20))
+    id_number = db.Column(db.String(20), unique=True)
+    work_number = db.Column(db.String(5), unique=True)
+    department = db.Column(db.Enum(*EnumerateData.department))
+    position = db.Column(db.Enum(*EnumerateData.position))
+    education = db.Column(db.Enum(*EnumerateData.education))
+    phone_number = db.Column(db.String(20))
+    enter_date = db.Column(db.DateTime)
+    is_available = db.Column(db.Boolean)
+
+class CheckData(db.Model):
+    __tablename__ = "check_data"
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    year = db.Column(db.Enum(*EnumerateData.year))
+    id_number = db.Column(db.String(20))
+    operate_type = db.Column(db.Enum(*EnumerateData.operate_type))
+    check_type =  db.Column(db.Enum(*EnumerateData.check_type))
+    check_source = db.Column(db.Enum(*EnumerateData.check_source))
+    get_point = db.Column(db.Float, default=0)
+    lost_point = db.Column(db.Float, default=0)
+    check_date = db.Column(db.DateTime)
+    remark = db.Column(db.String(50))
+    operator = db.Column(db.String(20))
+    operate_date = db.Column(db.DateTime)
+    attachment_id = db.Column(db.String(50), unique=True)
 
 model_dict = {
     "person": Person,
@@ -157,4 +185,6 @@ model_dict = {
     'user': User,
     'settle_data_2022': SettleData2022,
     'settle_data_2023': SettleData2023,
+    'staff': Staff,
+    'check_data': CheckData,
 }

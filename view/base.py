@@ -10,6 +10,7 @@ class Base(views.MethodView):
 
     model_name = None
     join_model_name = None
+    extra_model_name = None
     allowed_parameter = {}
     is_authentication = True
     is_year = True
@@ -23,6 +24,8 @@ class Base(views.MethodView):
         self.model = None
         self.method = None
         self.join_model = model_dict.get(self.join_model_name)
+        self.extra_model = model_dict.get(self.extra_model_name)
+        self.extra_query = None
         self.query = None
         self.user_id = None
         self.response_type = None
@@ -166,7 +169,7 @@ class Base(views.MethodView):
         main_parameter_dict = self.parameter_dict.get(self.model_name)
         join_parameter_dict = self.parameter_dict.get(self.join_model_name)
         for model, parameter_dict in ((self.model, main_parameter_dict), (self.join_model, join_parameter_dict)):
-            if not parameter_dict:
+            if not parameter_dict or not model:
                 continue
             or_dict = parameter_dict.pop('or_', None)
             if or_dict:
@@ -183,13 +186,16 @@ class Base(views.MethodView):
         if self.is_year:
             self.year = self.parameter_dict.get('year', Config.DEFAULT_YEAR)
             self.model = model_dict[f'{self.model_name}_{self.year}']
-        else:
+        elif self.model_name:
             self.model = model_dict[self.model_name]
-        self.query = self.model.query
+        if self.model:
+            self.query = self.model.query
         if self.join_model_name:
             self.query = self.query.outerjoin(self.join_model, self.model.id_number==self.join_model.id_number)
         if self.entities_dict['model']:
             self.query = self.query.with_entities(*(getattr(self.model, i) for i in self.entities_dict.get('model', [])), *(getattr(self.join_model, i) for i in self.entities_dict.get('join_model', [])))
+        if self.extra_model:
+            self.extra_query = self.extra_model.query
         self.make_query()
         self.clean_response()
 
@@ -239,5 +245,7 @@ class BaseList(Base):
             if data_count > 25000:
                 abort(413)
         super().clean_response()
+
+class BaseFile(Base):
 
 

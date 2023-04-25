@@ -12,7 +12,7 @@ class InsuredData(Base):
     entities_dict = {'model': ['id_number', 'own_expense', 'pay_date', 'insured_state', 'is_civil', 'remark', 'is_account_pay'], 'join_model': ['name', 'civil_attribute', 'poverty_state', 'orphan_attribute', 'disable_attribute', 'treat_attribute', 'accident_attribute', 'town', 'village', 'phone_number']}
     allowed_parameter = {
         "GET": {
-            "id_number": (str, 18, 'insured_data', False), "own_expense": (int, None, 'insured_data', False), "pay_date": ("date", None, 'insured_data', False), "insured_state": ("enum", None, 'insured_data', False), "is_civil": (bool, None, 'insured_data', False), "is_account_pay": (bool, None, 'insured_data', False),'name': (str, 20, "person", False),
+            "id_number": (str, 18, 'person', False), "own_expense": (int, None, 'insured_data', False), "pay_date": ("date", None, 'insured_data', False), "insured_state": ("enum", None, 'insured_data', False), "is_civil": (bool, None, 'insured_data', False), "is_account_pay": (bool, None, 'insured_data', False),'name': (str, 20, "person", False),
             "civil_attribute": ("enum", 'or_', "person", False), "orphan_attribute": ("enum", 'or_', "person", False), "disable_attribute": ("enum", 'or_', "person", False), "treat_attribute": ("enum", 'or_', "person", False),
             "accident_attribute": ("enum", 'or_', "person", False), "poverty_state": ("enum", 'or_', "person", False), "town": ("enum", None, "person", False), "village": ("enum", None, "person", False),'year': ("enum", None, '', True),
             "page": (int, None, '', False)}
