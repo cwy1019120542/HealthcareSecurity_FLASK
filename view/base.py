@@ -245,7 +245,7 @@ class Base(views.MethodView):
             self.year = self.parameter_dict.get('year', Config.DEFAULT_YEAR)
             self.model = model_dict[f'{self.model_name}_{self.year}']
         elif self.model_name:
-            self.model = model_dict[self.model_name]
+            self.model = model_dict.get(self.model_name)
         if self.model:
             self.query = self.model.query
         if self.join_model_name:
@@ -314,6 +314,7 @@ class BaseFile(Base):
     method_dict = {"GET": "args", "POST": "files"}
     is_year = False
     response_type_dict = {'GET': '', 'POST': OK}
+    model_name = 'attachment'
 
     def make_post_query(self):
         pass
