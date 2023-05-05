@@ -12,9 +12,9 @@ class InsuredRate(Base):
             "pay_date": ("date", None, 'insured_data', False, None), 'year': ("enum", None, '', True, None)}
     }
 
-    def make_query(self):
+    def make_get_query(self):
         self.query = self.query.with_entities(self.join_model.town, func.count(self.model.id)).filter(self.model.own_expense!=None).group_by(self.join_model.town)
-        super().make_query()
+        super().make_get_query()
 
     def clean_get_response(self):
         result_list = self.query.all()
@@ -55,9 +55,9 @@ class SpecialInsuredRate(Base):
             'year': ("enum", None, '', True, None)}
     }
 
-    def make_query(self):
+    def make_get_query(self):
         self.query = self.query.with_entities(self.join_model.town, self.model.insured_state, func.count(self.model.id)).group_by(self.join_model.town, self.model.insured_state)
-        super().make_query()
+        super().make_get_query()
 
     def clean_get_response(self):
         result_list = self.query.all()
