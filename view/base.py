@@ -1,10 +1,14 @@
+import os
 from calendar import monthrange
 from model import model_dict
-from flask import views, request, abort, session
+from flask import views, request, abort, session, send_file
 from response import OK
 from datetime import datetime, timedelta
 from config import EnumerateData, Config
 from sqlalchemy import or_
+from werkzeug.datastructures import FileStorage
+from uuid import uuid1
+from extension import db
 
 class Base(views.MethodView):
 
@@ -62,22 +66,83 @@ class Base(views.MethodView):
         return f'{round(data * 100, 2)}%' if data else '0%'
 
     @staticmethod
-    def to_string_date(date):
-        return date.strftime('%Y-%m-%d %H:%M:%S') if date else None
+    def to_string_date(date, has_time=True):
+        if has_time:
+            format_str = '%Y-%m-%d %H:%M:%S'
+        else:
+            format_str = '%Y-%m-%d'
+        return date.strftime(format_str) if date else None
 
     @staticmethod
     def bool_to_string(data):
         return '是' if data else '否'
 
-    def generate_parameter_dict(self, model_name, key, value, remark=None):
+    def generate_parameter_dict(self, model_name, key, value, relation):
         parameter_dict = self.parameter_dict
         if model_name:
             self.parameter_dict.setdefault(model_name, {})
             parameter_dict = self.parameter_dict[model_name]
-        if remark:
-            parameter_dict.setdefault(remark, {})[key] = value
+        if relation:
+            parameter_dict.setdefault(relation, {})[key] = value
         else:
             parameter_dict[key] = value
+
+    @staticmethod
+    def clean_enum(value, *args, **kwargs):
+        value_split = value.split('|')
+        for value_single in value_split:
+            if value_single not in getattr(EnumerateData, kwargs['key']):
+                abort(400)
+        return value_split if len(value_split) > 1 else value_split[0]
+
+    @staticmethod
+    def clean_combine_date(value, *args, **kwargs):
+        value_split = value.split('|')
+        if len(value_split) < 2:
+            abort(400)
+        start_date = datetime.strptime(f'{value_split[0]}-01 00:00:00', '%Y-%m-%d %H:%M:%S')
+        end_date_year, end_date_month = value_split[1].split('-')
+        end_date = datetime.strptime(f'{value_split[1]}-{monthrange(int(end_date_year), int(end_date_month))[1]} 23:59:59', '%Y-%m-%d %H:%M:%S')
+        return [start_date, end_date]
+
+    @staticmethod
+    def clean_date(value, *args, **kwargs):
+        value_split = value.split('T')
+        if len(value_split) < 2:
+            abort(400)
+        return datetime.strptime(value_split[0], '%Y-%m-%d')
+
+    @staticmethod
+    def clean_bool(value, *args, **kwargs):
+        return True if value != '0' else False
+
+    @staticmethod
+    def clean_int(value, *args, **kwargs):
+        if str(value).isdigit():
+            return int(value)
+        else:
+            abort(400)
+
+    @staticmethod
+    def clean_str(value, *args, **kwargs):
+        if not isinstance(value, str) or len(value) > kwargs['max_len']:
+            abort(400)
+        return value
+
+    @staticmethod
+    def clean_file(value, *args, **kwargs):
+        if not isinstance(value, FileStorage):
+            abort(400)
+        return value
+
+    @staticmethod
+    def clean_float(value, *args, **kwargs):
+        try:
+            value = float(value)
+        except:
+            abort(400)
+        else:
+            return value
 
     def filter_parameter(self):
         flask_parameter_dict = getattr(request, self.method_dict[self.method])
@@ -85,43 +150,13 @@ class Base(views.MethodView):
         allowed_parameter_dict = self.allowed_parameter[self.method]
         must_parameter_list = [i for i, j in allowed_parameter_dict.items() if j[3]]
         for must_parameter in must_parameter_list:
-            if must_parameter not in request_parameter_dict:
+            if must_parameter not in request_parameter_dict or not request_parameter_dict[must_parameter]:
                 abort(400)
         for key, value in request_parameter_dict.items():
             if key not in allowed_parameter_dict or not value:
                 continue
-            value_type, remark, model_name, *extra = allowed_parameter_dict[key]
-            if value_type == "enum":
-                value_split = value.split('|')
-                for value_single in value_split:
-                    if value_single not in getattr(EnumerateData, key):
-                        abort(400)
-                value_split = value_split if len(value_split) > 1 else value_split[0]
-                self.generate_parameter_dict(model_name, key, value_split, remark)
-            elif value_type == 'date':
-                value_split = value.split('|')
-                if len(value_split) < 2:
-                    abort(400)
-                start_date = datetime.strptime(f'{value_split[0]}-01 00:00:00', '%Y-%m-%d %H:%M:%S')
-                end_date_year, end_date_month = value_split[1].split('-')
-                end_date_str = f'{value_split[1]}-{monthrange(int(end_date_year), int(end_date_month))[1]} 23:59:59'
-                end_date = datetime.strptime(end_date_str, '%Y-%m-%d %H:%M:%S')
-                self.generate_parameter_dict(model_name, key, [start_date, end_date])
-            else:
-                if not isinstance(value, value_type):
-                    if value_type == bool:
-                        self.generate_parameter_dict(model_name, key, True if value != '0' else False)
-                    elif value_type == int:
-                        if str(value).isdigit():
-                            self.generate_parameter_dict(model_name, key, int(value))
-                        else:
-                            abort(400)
-                    else:
-                        abort(400)
-                else:
-                    if remark and len(value) > remark:
-                        abort(400)
-                    self.generate_parameter_dict(model_name, key, value)
+            value_type, relation, model_name, is_must, max_len = allowed_parameter_dict[key]
+            self.generate_parameter_dict(model_name, key, getattr(self, f'clean_{value_type}')(value, key=key, max_len=max_len), relation)
         session_town = session.get('town')
         if 'town' in allowed_parameter_dict and session_town and self.is_authentication:
             if 'town' not in self.parameter_dict['person'] or self.parameter_dict['person']['town']!=session_town:
@@ -165,7 +200,7 @@ class Base(views.MethodView):
             filter_parameter_list.append(filter_parameter)
         return filter_parameter_list
 
-    def make_query(self):
+    def make_get_query(self):
         main_parameter_dict = self.parameter_dict.get(self.model_name)
         join_parameter_dict = self.parameter_dict.get(self.join_model_name)
         for model, parameter_dict in ((self.model, main_parameter_dict), (self.join_model, join_parameter_dict)):
@@ -175,6 +210,29 @@ class Base(views.MethodView):
             if or_dict:
                 self.query = self.query.filter(or_(*self.get_query_parameter(model, or_dict)))
             self.query = self.query.filter(*self.get_query_parameter(model, parameter_dict))
+
+    def make_post_query(self):
+        data_dict = self.parameter_dict[self.model_name]
+        data_dict['operator'] = model_dict['user'].query.filter_by(id=self.user_id).first().name
+        data_dict['operate_date'] = datetime.now()
+        db.session.add(self.model(**data_dict))
+        db.session.commit()
+
+    def clean_post_response(self):
+        pass
+
+    def make_put_query(self):
+        pass
+
+    def clean_put_response(self):
+        pass
+
+    def make_delete_query(self):
+        pass
+
+    def clean_delete_response(self):
+        pass
+
 
     def deal_request(self, user_id):
         self.method = request.method
@@ -196,10 +254,10 @@ class Base(views.MethodView):
             self.query = self.query.with_entities(*(getattr(self.model, i) for i in self.entities_dict.get('model', [])), *(getattr(self.join_model, i) for i in self.entities_dict.get('join_model', [])))
         if self.extra_model:
             self.extra_query = self.extra_model.query
-        self.make_query()
-        self.clean_response()
+        getattr(self, f'make_{self.method.lower()}_query')()
+        getattr(self, f'clean_{self.method.lower()}_response')()
 
-    def clean_response(self):
+    def clean_get_response(self):
         self.response_data = self.query.all()
         response_data = []
         offset = self.extra_response_data.get('offset')
@@ -214,7 +272,7 @@ class Base(views.MethodView):
 
     def get(self, user_id=None):
         self.deal_request(user_id)
-        return self.response_type(self.response_data, self.extra_response_data)
+        return self.response_type(self.response_data, self.extra_response_data) if self.response_type else self.response_data
 
     def post(self, user_id=None):
         self.deal_request(user_id)
@@ -233,7 +291,7 @@ class BaseList(Base):
 
     is_page = True
 
-    def clean_response(self):
+    def clean_get_response(self):
         page = self.parameter_dict.get("page", 1)
         limit = 10
         offset = (page - 1) * limit
@@ -244,8 +302,35 @@ class BaseList(Base):
         else:
             if data_count > 25000:
                 abort(413)
-        super().clean_response()
+        super().clean_get_response()
 
 class BaseFile(Base):
 
+    methods = ['get', 'post']
+    allowed_parameter = {
+        'GET': {'attachment_id': ('str', None, '', True, 50)},
+        'POST': {'attachment': ('file', None, '', True, None)},
+    }
+    method_dict = {"GET": "args", "POST": "files"}
+    is_year = False
+    response_type_dict = {'GET': '', 'POST': OK}
 
+    def make_post_query(self):
+        pass
+
+    def clean_post_response(self):
+        attachment = self.parameter_dict['attachment']
+        attachment_id = f'{uuid1()}{os.path.splitext(attachment.filename)[-1]}'
+        attachment.save(os.path.join(Config.ATTACHMENT_DIR, attachment_id))
+        self.response_data['attachment_id'] = attachment_id
+
+    def make_get_query(self):
+        pass
+
+    def clean_get_response(self):
+        attachment_id = self.parameter_dict['attachment_id']
+        file_path = os.path.join(Config.ATTACHMENT_DIR, attachment_id)
+        if not os.path.exists(file_path):
+            abort(404)
+        self.response_data = send_file(file_path, attachment_filename=attachment_id)
+        self.response_data.headers['file_name'] = attachment_id

@@ -13,10 +13,7 @@ class ExcelResponse(Response):
         sheet = wb[wb.sheetnames[0]]
         sheet.append(header)
         for data_group in data_group_list:
-            try:
-                sheet.append(data_group)
-            except:
-                continue
+            sheet.append(data_group)
         file_name = f'{uuid1()}.xlsx'
         header = {
             "Content-Disposition": f'attachment; filename={file_name}',

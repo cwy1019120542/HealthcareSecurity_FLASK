@@ -9,14 +9,14 @@ class InsuredRate(Base):
     join_model_name = 'person'
     allowed_parameter = {
         "GET": {
-            "pay_date": ("date", None, 'insured_data', False), 'year': ("enum", None, '', True)}
+            "pay_date": ("date", None, 'insured_data', False, None), 'year': ("enum", None, '', True, None)}
     }
 
     def make_query(self):
         self.query = self.query.with_entities(self.join_model.town, func.count(self.model.id)).filter(self.model.own_expense!=None).group_by(self.join_model.town)
         super().make_query()
 
-    def clean_response(self):
+    def clean_get_response(self):
         result_list = self.query.all()
         self.response_data = []
         town_list = [i[0] for i in result_list]
@@ -48,18 +48,18 @@ class SpecialInsuredRate(Base):
     join_model_name = 'person'
     allowed_parameter = {
         "GET": {
-            "pay_date": ("date", None, 'insured_data', False),
-            "civil_attribute": ("enum", 'or_', "person", False), "orphan_attribute": ("enum", 'or_', "person", False),
-            "disable_attribute": ("enum", 'or_', "person", False), "treat_attribute": ("enum", 'or_', "person", False),
-            "accident_attribute": ("enum", 'or_', "person", False), "poverty_state": ("enum", 'or_', "person", False),
-            'year': ("enum", None, '', True)}
+            "pay_date": ("combine_date", None, 'insured_data', False, None),
+            "civil_attribute": ("enum", 'or_', "person", False, None), "orphan_attribute": ("enum", 'or_', "person", False, None),
+            "disable_attribute": ("enum", 'or_', "person", False, None), "treat_attribute": ("enum", 'or_', "person", False, None),
+            "accident_attribute": ("enum", 'or_', "person", False, None), "poverty_state": ("enum", 'or_', "person", False, None),
+            'year': ("enum", None, '', True, None)}
     }
 
     def make_query(self):
         self.query = self.query.with_entities(self.join_model.town, self.model.insured_state, func.count(self.model.id)).group_by(self.join_model.town, self.model.insured_state)
         super().make_query()
 
-    def clean_response(self):
+    def clean_get_response(self):
         result_list = self.query.all()
         result_dict = {}
         self.response_data = []

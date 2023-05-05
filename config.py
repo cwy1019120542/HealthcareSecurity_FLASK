@@ -10,6 +10,8 @@ class Config:
     PERMANENT_SESSION_LIFETIME = timedelta(days=3)
     SESSION_COOKIE_NAME = "HealthcareSecurity"
     DEFAULT_YEAR = '2023'
+    MAX_CONTENT_LENGTH = 10 * 1024 * 1024
+    ATTACHMENT_DIR = os.getenv('ATTACHMENT_DIR')
 
 class EnumerateData:
     attribute_dict = {

@@ -5,6 +5,7 @@ from view.login import Login
 from view.settle_data import SettleDataList, SettleDataStatistic, SettleDataListDownload, SettleDataStatisticDownload, SettleDataMerge, SettleDataMergeDownload
 from view.check_data import Staff, CheckData
 from view.user import Password
+from view.base import BaseFile
 route_dict = {
     InsuredDataList: "/api/user/<int:user_id>/insured_data/list",
     InsuredDataStatistic: "/api/user/<int:user_id>/insured_data/statistic",
@@ -23,4 +24,5 @@ route_dict = {
     SettleDataMergeDownload: '/api/user/<int:user_id>/settle_data/merge/download',
     Staff: '/api/user/<int:user_id>/staff/list',
     CheckData: '/api/user/<int:user_id>/check_data/list',
+    BaseFile: '/api/user/<int:user_id>/attachment',
 }

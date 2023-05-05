@@ -159,7 +159,7 @@ class Staff(db.Model):
     position = db.Column(db.Enum(*EnumerateData.position))
     education = db.Column(db.Enum(*EnumerateData.education))
     phone_number = db.Column(db.String(20))
-    enter_date = db.Column(db.DateTime)
+    enter_date = db.Column(db.Date)
     is_available = db.Column(db.Boolean)
 
 class CheckData(db.Model):
@@ -172,11 +172,11 @@ class CheckData(db.Model):
     check_source = db.Column(db.Enum(*EnumerateData.check_source))
     get_point = db.Column(db.Float, default=0)
     lost_point = db.Column(db.Float, default=0)
-    check_date = db.Column(db.DateTime)
+    check_date = db.Column(db.Date)
     remark = db.Column(db.String(50))
     operator = db.Column(db.String(20))
     operate_date = db.Column(db.DateTime)
-    attachment_id = db.Column(db.String(50), unique=True)
+    attachment_id = db.Column(db.String(50))
 
 model_dict = {
     "person": Person,

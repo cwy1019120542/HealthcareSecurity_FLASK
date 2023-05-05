@@ -3,14 +3,14 @@ from .base import Base
 
 class EnumerateData(Base):
     allowed_parameter = {"GET": {
-            "enumerate_field": ("enum", None, '', True)}}
+            "enumerate_field": ("enum", None, '', True, None)}}
     is_authentication = False
     is_year = False
 
-    def make_query(self):
+    def make_get_query(self):
         pass
 
-    def clean_response(self):
+    def clean_get_response(self):
         enumerate_field = self.parameter_dict["enumerate_field"]
         if isinstance(enumerate_field, str):
             enumerate_field = [enumerate_field]

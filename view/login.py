@@ -11,14 +11,17 @@ class Login(Base):
     entities_dict = {'model': ['id', 'name', 'phone_number', 'qq', 'town', 'identity', 'is_available']}
     allowed_parameter = {
         "POST": {
-            "phone_number": (str, 20, 'user', True), "password": (str, 20, 'user', True)
+            "phone_number": ('str', None, 'user', True, 20), "password": ('str', None, 'user', True, 20)
         }
     }
     is_year = False
     is_authentication = False
 
-    def clean_response(self):
-        super().clean_response()
+    def make_post_query(self):
+        super(Login, self).make_get_query()
+
+    def clean_post_response(self):
+        super().clean_get_response()
         if not self.response_data or not self.response_data[0]['is_available']:
             abort(401)
         self.response_data = self.response_data[0]
