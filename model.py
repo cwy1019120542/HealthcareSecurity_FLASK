@@ -178,6 +178,12 @@ class CheckData(db.Model):
     operate_date = db.Column(db.DateTime)
     attachment_id = db.Column(db.String(50))
 
+class NumberData(db.Model):
+    __tablename__ = "number_data"
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    self_number = db.Column(db.String(30), unique=True)
+    id_number = db.Column(db.String(18))
+
 model_dict = {
     "person": Person,
     "insured_data_2022": InsuredData2022,

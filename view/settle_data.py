@@ -16,7 +16,7 @@ class SettleData(Base):
                                     'treat_attribute', 'accident_attribute', 'town', 'village',
                                     'phone_number']}
     allowed_parameter = {
-        "GET": {'name': ('str', None, "person", False, 20), 'id_number': (str, None, "person", False, 18), "civil_attribute": ("enum", 'or_', "person", False, None), "orphan_attribute": ("enum", 'or_', "person", False, None),
+        "GET": {'name': ('str', None, "person", False, 20), 'id_number': ('str', None, "person", False, 18), "civil_attribute": ("enum", 'or_', "person", False, None), "orphan_attribute": ("enum", 'or_', "person", False, None),
             "disable_attribute": ("enum", 'or_', "person", False, None), "treat_attribute": ("enum", 'or_', "person", False, None),"accident_attribute": ("enum", 'or_', "person", False, None),
             "poverty_state": ("enum", 'or_', "person", False, None), "town": ("enum", None, "person", False, None), "village": ("enum", None, "person", False, None),'year': ("enum", None, '', True, None),
             "page": ('int', None, '', False, None), "person_type": ("enum", None, 'settle_data', False, None), "hospital_place": ("enum", None, 'settle_data', False, None), "hospital_level": ("enum", None, 'settle_data', False, None), 'is_centre': ('bool', None, 'settle_data', False, None),
