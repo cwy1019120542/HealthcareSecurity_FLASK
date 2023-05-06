@@ -1,10 +1,11 @@
-from .base import BaseList
+from .base import BaseList, Attachment
 from response import ExcelResponse, OK
 from sqlalchemy.sql import func
 from model import model_dict
 from flask import abort
+from config import Config
 
-class Staff(BaseList):
+class StaffList(BaseList):
     is_year = False
     methods = ['get']
     model_name = "staff"
@@ -34,7 +35,7 @@ class Staff(BaseList):
                     data_group[field] = 0
             data_group['point'] = 100 + data_group['get_point'] - data_group['lost_point']
 
-class CheckData(BaseList):
+class CheckDataList(BaseList):
     is_year = False
     methods = ['get', 'post']
     model_name = "check_data"
@@ -71,3 +72,25 @@ class CheckData(BaseList):
         if not self.join_model.query.filter(self.join_model.id_number==self.parameter_dict[self.model_name]['id_number']).first():
             abort(400)
         super().make_post_query()
+
+class StaffListDownload(StaffList):
+
+    response_type_dict = {'GET': ExcelResponse}
+
+    def clean_get_response(self):
+        super().clean_get_response()
+        self.response_data = (tuple(i.values()) for i in self.response_data)
+        self.extra_response_data = ['序号', '姓名', '身份证号', '工号', '部门', '岗位', '学历', '手机号', '调入时间','事项数', '加分', '扣分', '分数']
+
+class CheckDataListDownload(CheckDataList):
+
+    response_type_dict = {'GET': ExcelResponse}
+
+    def clean_get_response(self):
+        super().clean_get_response()
+        self.response_data = (tuple(i.values()) for i in self.response_data)
+        self.extra_response_data = ['序号', '身份证号', '奖惩类型', '考核事项', '考核渠道', '加分', '扣分', '考核日期', '备注','记录人', '记录时间', '附件', '姓名']
+
+class CheckAttachment(Attachment):
+
+    base_dir = Config.CHECK_ATTACHMENT_DIR

@@ -304,7 +304,7 @@ class BaseList(Base):
                 abort(413)
         super().clean_get_response()
 
-class BaseFile(Base):
+class Attachment(Base):
 
     methods = ['get', 'post']
     allowed_parameter = {
@@ -314,7 +314,7 @@ class BaseFile(Base):
     method_dict = {"GET": "args", "POST": "files"}
     is_year = False
     response_type_dict = {'GET': '', 'POST': OK}
-    model_name = 'attachment'
+    base_dir = ''
 
     def make_post_query(self):
         pass
@@ -322,7 +322,7 @@ class BaseFile(Base):
     def clean_post_response(self):
         attachment = self.parameter_dict['attachment']
         attachment_id = f'{uuid1()}{os.path.splitext(attachment.filename)[-1]}'
-        attachment.save(os.path.join(Config.ATTACHMENT_DIR, attachment_id))
+        attachment.save(os.path.join(self.base_dir, attachment_id))
         self.response_data['attachment_id'] = attachment_id
 
     def make_get_query(self):
@@ -330,7 +330,7 @@ class BaseFile(Base):
 
     def clean_get_response(self):
         attachment_id = self.parameter_dict['attachment_id']
-        file_path = os.path.join(Config.ATTACHMENT_DIR, attachment_id)
+        file_path = os.path.join(self.base_dir, attachment_id)
         if not os.path.exists(file_path):
             abort(404)
         self.response_data = send_file(file_path, attachment_filename=attachment_id)
