@@ -55,7 +55,7 @@ class EnumerateData:
         '其他': ('其他', ),}
     town = tuple(town_village_dict.keys())
     village = tuple(set(j for i in town_village_dict.values() for j in i))
-    authority = {'管理员': ('*', ), '服务中心': ('insured_data', 'settle_data', 'check_data', 'staff', 'attachment'), '医保局': ('insured_data', 'settle_data'), '政府': ('insured_data')}
+    authority = {'管理员': ('*', ), '服务中心': ('user', 'insured_data', 'settle_data', 'check_data', 'staff', 'check_attachment'), '医保局': ('user', 'insured_data', 'settle_data'), '政府': ('user', 'insured_data')}
     identity = tuple(authority.keys())
     person_type = ('居民', '职工')
     hospital_place = ('本地', '市内异地', '省内异地', '跨省异地')
@@ -92,7 +92,7 @@ class EnumerateData:
             '浏览非工作信息': {'单位': -1, '政务服务中心/群众': -2, '政府热线/市委监委': -3}, '不参加学习培训': {'单位': -1},
             '未按时到岗': {'单位': -0.5}, '提前就餐': {'单位': -0.5, '政务服务中心/群众': -1.5},
             '卫生不干净': {'单位': -0.5, '政务服务中心/群众': -1.5}, '未穿工作服': {'单位': -0.5, '政务服务中心/群众': -1.5},
-            '未打卡/迟到/早退': {'政务服务中心': -0.2}, '因私请假超10天': {'政务服务中心': -2},
+            '未打卡/迟到/早退': {'政务服务中心': -1}, '因私请假超10天': {'政务服务中心': -2},
             '投诉': {'政务服务中心/群众': -2, '政府热线/市委监委': -4}, '短信评价8分以下': {'政务服务中心': -1},
             '未按时完成工作': {'单位': -2}, '业务办理出错': {'单位': -2},
             '测验低于60分': {'单位': -1}, '测验低于70分': {'单位': -0.5},

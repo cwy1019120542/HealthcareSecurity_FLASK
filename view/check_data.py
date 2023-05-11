@@ -94,3 +94,4 @@ class CheckDataListDownload(CheckDataList):
 class CheckAttachment(Attachment):
 
     base_dir = Config.CHECK_ATTACHMENT_DIR
+    model_name = "check_attachment"
