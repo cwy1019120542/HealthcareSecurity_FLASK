@@ -33,7 +33,7 @@ class StaffList(BaseList):
             else:
                 for field in self.entities_dict['extra_model']:
                     data_group[field] = 0
-            data_group['point'] = 100 + data_group['get_point'] - data_group['lost_point']
+            data_group['point'] = 100 + data_group['get_point'] + data_group['lost_point']
 
 class CheckDataList(BaseList):
     is_year = False

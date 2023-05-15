@@ -32,6 +32,8 @@ class InsuredData2022(db.Model):
     is_civil = db.Column(db.Boolean)
     remark = db.Column(db.String(50))
     is_account_pay = db.Column(db.Boolean)
+    town = db.Column(db.Enum(*EnumerateData.town))
+    village = db.Column(db.Enum(*EnumerateData.village))
 
 
 class InsuredData2023(db.Model):
@@ -45,6 +47,8 @@ class InsuredData2023(db.Model):
     is_civil = db.Column(db.Boolean)
     remark = db.Column(db.String(50))
     is_account_pay = db.Column(db.Boolean)
+    town = db.Column(db.Enum(*EnumerateData.town))
+    village = db.Column(db.Enum(*EnumerateData.village))
 
 
 class User(db.Model):
