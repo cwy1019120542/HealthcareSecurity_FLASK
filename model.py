@@ -188,6 +188,13 @@ class NumberData(db.Model):
     self_number = db.Column(db.String(30), unique=True)
     id_number = db.Column(db.String(18))
 
+class NotifyData(db.Model):
+    __tablename__ = "notify_data"
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    title = db.Column(db.String(10))
+    content = db.Column(db.String(50))
+    is_available = db.Column(db.Boolean)
+
 model_dict = {
     "person": Person,
     "insured_data_2022": InsuredData2022,
@@ -197,4 +204,5 @@ model_dict = {
     'settle_data_2023': SettleData2023,
     'staff': Staff,
     'check_data': CheckData,
+    'notify_data': NotifyData,
 }

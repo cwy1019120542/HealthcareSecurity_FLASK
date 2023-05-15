@@ -333,5 +333,5 @@ class Attachment(Base):
         file_path = os.path.join(self.base_dir, attachment_id)
         if not os.path.exists(file_path):
             abort(404)
-        self.response_data = send_file(file_path, attachment_filename=attachment_id)
+        self.response_data = send_file(file_path)
         self.response_data.headers['file_name'] = attachment_id
