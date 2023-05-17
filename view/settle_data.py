@@ -11,14 +11,13 @@ class SettleData(Base):
     methods = ['get']
     model_name = "settle_data"
     join_model_name = 'person'
-    entities_dict = {'model': ['id', 'settle_id', 'cure_id', 'self_number', 'id_number', 'person_type', 'hospital_id', 'hospital_name', 'hospital_level', 'hospital_place', 'start_date', 'end_date', 'settle_date', 'evidence_type', 'all_expense', 'self_expense', 'over_expense', 'first_expense', 'inner_expense', 'start_pay', 'overall_pay', 'large_pay', 'big_pay', 'rescue_pay', 'civil_pay', 'other_pay', 'all_pay', 'cash_pay', 'account_pay', 'together_pay', 'illness_name', 'cure_type', 'overall_percent', 'is_centre', 'operator'],
+    entities_dict = {'model': ['id', 'settle_id', 'cure_id', 'self_number', 'id_number', 'person_type', 'hospital_id', 'hospital_name', 'hospital_level', 'hospital_place', 'start_date', 'end_date', 'settle_date', 'evidence_type', 'all_expense', 'self_expense', 'over_expense', 'first_expense', 'inner_expense', 'start_pay', 'overall_pay', 'large_pay', 'big_pay', 'rescue_pay', 'civil_pay', 'other_pay', 'all_pay', 'cash_pay', 'account_pay', 'together_pay', 'illness_name', 'cure_type', 'overall_percent', 'is_centre', 'operator', 'town', 'village', 'remark'],
                      'join_model': ['name', 'civil_attribute', 'poverty_state', 'orphan_attribute', 'disable_attribute',
-                                    'treat_attribute', 'accident_attribute', 'town', 'village',
-                                    'phone_number']}
+                                    'treat_attribute', 'accident_attribute', 'phone_number']}
     allowed_parameter = {
         "GET": {'name': ('str', None, "person", False, 20), 'id_number': ('str', None, "person", False, 18), "civil_attribute": ("enum", 'or_', "person", False, None), "orphan_attribute": ("enum", 'or_', "person", False, None),
             "disable_attribute": ("enum", 'or_', "person", False, None), "treat_attribute": ("enum", 'or_', "person", False, None),"accident_attribute": ("enum", 'or_', "person", False, None),
-            "poverty_state": ("enum", 'or_', "person", False, None), "town": ("enum", None, "person", False, None), "village": ("enum", None, "person", False, None),'year': ("enum", None, '', True, None),
+            "poverty_state": ("enum", 'or_', "person", False, None), "town": ("enum", None, "settle_data", False, None), "village": ("enum", None, "settle_data", False, None),'year': ("enum", None, '', True, None),
             "page": ('int', None, '', False, None), "person_type": ("enum", None, 'settle_data', False, None), "hospital_place": ("enum", None, 'settle_data', False, None), "hospital_level": ("enum", None, 'settle_data', False, None), 'is_centre': ('bool', None, 'settle_data', False, None),
             "evidence_type": ("enum", None, 'settle_data', False, None), "cure_type": ("enum", None, 'settle_data', False, None), "settle_date": ("combine_date", None, 'settle_data', False, None),
             "pay_type": ("enum", None, 'settle_data', False, None), "pay_type_operator": ("enum", None, 'settle_data', False, None), "pay_type_value": ('int', None, 'settle_data', False, None), "hospital_name": ('str', None, "settle_data", False, 50),

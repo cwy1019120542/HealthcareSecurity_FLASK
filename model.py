@@ -112,7 +112,9 @@ class SettleData2022(db.Model):
     overall_percent = db.Column(DOUBLE)
     is_centre = db.Column(db.Boolean)
     operator = db.Column(db.String(20))
-
+    remark = db.Column(db.String(50))
+    town = db.Column(db.Enum(*EnumerateData.town))
+    village = db.Column(db.Enum(*EnumerateData.village))
 
 class SettleData2023(db.Model):
     __tablename__ = "settle_data_2023"
@@ -152,6 +154,9 @@ class SettleData2023(db.Model):
     overall_percent = db.Column(DOUBLE)
     is_centre = db.Column(db.Boolean)
     operator = db.Column(db.String(20))
+    remark = db.Column(db.String(50))
+    town = db.Column(db.Enum(*EnumerateData.town))
+    village = db.Column(db.Enum(*EnumerateData.village))
 
 class Staff(db.Model):
     __tablename__ = "staff"
