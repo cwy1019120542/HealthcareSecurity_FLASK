@@ -6,6 +6,7 @@ from view.settle_data import SettleDataList, SettleDataStatistic, SettleDataList
 from view.check_data import StaffList, CheckDataList, StaffListDownload, CheckDataListDownload, CheckAttachment
 from view.notify_data import NotifyData
 from view.user import Password
+from view.civil_pay import CivilPayList, CivilPayListDownload
 route_dict = {
     InsuredDataList: "/api/user/<int:user_id>/insured_data/list",
     InsuredDataStatistic: "/api/user/<int:user_id>/insured_data/statistic",
@@ -28,4 +29,6 @@ route_dict = {
     CheckDataListDownload: '/api/user/<int:user_id>/check_data/list/download',
     CheckAttachment: '/api/user/<int:user_id>/check_attachment',
     NotifyData: '/api/notify_data',
+    CivilPayList: '/api/user/<int:user_id>/civil_pay/list',
+    CivilPayListDownload: '/api/user/<int:user_id>/civil_pay/list/download',
 }

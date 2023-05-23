@@ -9,7 +9,7 @@ class InsuredRate(Base):
     join_model_name = 'person'
     allowed_parameter = {
         "GET": {
-            "pay_date": ("date", None, 'insured_data', False, None), 'year': ("enum", None, '', True, None)}
+            "pay_date": ("combine_date", None, 'insured_data', False, None), 'year': ("enum", None, '', True, None)}
     }
 
     def make_get_query(self):

@@ -62,18 +62,6 @@ class User(db.Model):
     identity = db.Column(db.Enum(*EnumerateData.identity))
     is_available = db.Column(db.Boolean)
 
-    def dict_response(self):
-        return {
-            "id": self.id,
-            "phone_number": self.phone_number,
-            'qq': self.qq,
-            "name" : self.name,
-            "town" : self.town,
-            "identity": self.identity,
-            "authority": EnumerateData.authority[self.identity],
-            'is_available': self.is_available,
-        }
-
 class SettleData2022(db.Model):
     __tablename__ = "settle_data_2022"
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
