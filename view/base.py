@@ -114,7 +114,7 @@ class Base(views.MethodView):
 
     @staticmethod
     def clean_bool(value, *args, **kwargs):
-        return True if value != '0' else False
+        return True if value != '否' else False
 
     @staticmethod
     def clean_int(value, *args, **kwargs):
