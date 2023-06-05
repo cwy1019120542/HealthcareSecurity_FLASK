@@ -17,7 +17,7 @@ class CivilPayList(Base):
     'together_pay', 'overall_percent')
 
     def make_get_query(self):
-        self.parameter_dict[self.model_name]['cure_type'] = ['双通道购药', '普通住院', '无法确定他方责任的意外伤害（外伤住院）', '转外诊治住院', '急诊转住院', '单病种住院', '日间手术', '同病同保障住院', '床日费用住院', '门诊慢性病', '门诊特殊病', '计划生育住院', '门诊单病种', '日间病床', '无他方责任意外伤害住院', '分疗程间断住院治疗']
+        self.parameter_dict[self.model_name]['cure_type'] = ['普通住院', '生育住院', '外伤住院', '无他方责任意外伤害住院', '分疗程间断住院治疗', '单病种住院', '床日费用住院', '转外诊治住院', '计划生育手术费', '计划生育住院', '急诊转住院', '自主就医住院', '门诊特病', '门诊慢病', '门诊单病种']
         self.parameter_dict[self.model_name]['is_valid'] = True
         self.parameter_dict[self.model_name]['is_refund'] = False
         super().make_get_query()
