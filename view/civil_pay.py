@@ -17,7 +17,7 @@ class CivilPayList(Base):
     'together_pay', 'overall_percent')
 
     def make_get_query(self):
-        self.parameter_dict[self.model_name]['cure_type'] = ['普通住院', '生育住院', '外伤住院', '无他方责任意外伤害住院', '分疗程间断住院治疗', '单病种住院', '床日费用住院', '转外诊治住院', '计划生育手术费', '计划生育住院', '急诊转住院', '自主就医住院', '门诊特病', '门诊慢病', '门诊单病种']
+        self.parameter_dict[self.model_name]['cure_type'] = ['普通住院', '外伤住院', '无他方责任意外伤害住院', '分疗程间断住院治疗', '单病种住院', '床日费用住院', '转外诊治住院', '急诊转住院', '自主就医住院', '门诊特病', '门诊慢病']
         self.parameter_dict[self.model_name]['is_valid'] = True
         self.parameter_dict[self.model_name]['is_refund'] = False
         super().make_get_query()
@@ -65,7 +65,7 @@ class CivilPayList(Base):
             civil_inner_expense = inner_expense - all_pay
             civil_out_expense = all_expense - inner_expense
             system_overall_pay = (inner_expense - start_pay) * overall_percent
-            if cure_type in ('门诊慢性病', '门诊特殊病'):
+            if cure_type in ('门诊特病', '门诊慢病'):
                 civil_pay_type = '慢特病'
             else:
                 if overall_percent:

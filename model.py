@@ -19,6 +19,7 @@ class Person(db.Model):
     town = db.Column(db.Enum(*EnumerateData.town))
     village = db.Column(db.Enum(*EnumerateData.village))
     phone_number = db.Column(db.String(20))
+    family_number = db.Column(db.String(20))
 
 class InsuredData2021(db.Model):
     __tablename__ = "insured_data_2021"
