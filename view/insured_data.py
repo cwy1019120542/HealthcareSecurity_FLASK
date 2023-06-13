@@ -9,10 +9,10 @@ class InsuredData(Base):
     methods = ['get']
     model_name = "insured_data"
     join_model_name = 'person'
-    entities_dict = {'model': ['id_number', 'own_expense', 'pay_date', 'insured_state', 'is_civil', 'remark', 'is_account_pay'], 'join_model': ['name', 'civil_attribute', 'poverty_state', 'orphan_attribute', 'disable_attribute', 'treat_attribute', 'accident_attribute', 'town', 'village', 'phone_number']}
+    entities_dict = {'model': ['id_number', 'own_expense', 'pay_date', 'insured_state', 'is_civil', 'remark', 'is_account_pay'], 'join_model': ['name', 'civil_attribute', 'poverty_state', 'orphan_attribute', 'disable_attribute', 'treat_attribute', 'accident_attribute', 'town', 'village', 'phone_number', 'family_number']}
     allowed_parameter = {
         "GET": {
-            "id_number": ('str', None, 'person', False, 18), "own_expense": ('int', None, 'insured_data', False, None), "pay_date": ("combine_date", None, 'insured_data', False, None), "insured_state": ("enum", None, 'insured_data', False, None), "is_civil": ('bool', None, 'insured_data', False, None), "is_account_pay": ('bool', None, 'insured_data', False, None),'name': ('str', None, "person", False, 20),
+            "id_number": ('str', None, 'person', False, 18), "family_number": ('str', None, 'person', False, 20), "own_expense": ('int', None, 'insured_data', False, None), "pay_date": ("combine_date", None, 'insured_data', False, None), "insured_state": ("enum", None, 'insured_data', False, None), "is_civil": ('bool', None, 'insured_data', False, None), "is_account_pay": ('bool', None, 'insured_data', False, None),'name': ('str', None, "person", False, 20),
             "civil_attribute": ("enum", 'or_', "person", False, None), "orphan_attribute": ("enum", 'or_', "person", False, None), "disable_attribute": ("enum", 'or_', "person", False, None), "treat_attribute": ("enum", 'or_', "person", False, None),
             "accident_attribute": ("enum", 'or_', "person", False, None), "poverty_state": ("enum", 'or_', "person", False, None), "town": ("enum", None, "person", False, None), "village": ("enum", None, "person", False, None),'year': ("enum", None, '', True, None),
             "page": ('int', None, '', False, None)}
@@ -59,7 +59,7 @@ class InsuredDataListDownload(InsuredDataList):
     def clean_get_response(self):
         super().clean_get_response()
         self.response_data = (tuple(i.values()) for i in self.response_data)
-        self.extra_response_data = ['序号', '身份证号', '自付金额', '支付日期', '参保情况', '是否参加公务员医疗补助', '备注', '是否共济缴费', '姓名','乡镇', '村', '手机号', '人员属性']
+        self.extra_response_data = ['序号', '身份证号', '自付金额', '支付日期', '参保情况', '是否参加公务员医疗补助', '备注', '是否共济缴费', '姓名','乡镇', '村', '手机号', '户号', '人员属性']
 
 class InsuredDataStatisticDownload(InsuredDataStatistic):
 
