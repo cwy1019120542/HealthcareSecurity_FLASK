@@ -9,7 +9,7 @@ class Config:
     Access_Control_Allow_Origin = '*'
     PERMANENT_SESSION_LIFETIME = timedelta(days=3)
     SESSION_COOKIE_NAME = "HealthcareSecurity"
-    DEFAULT_YEAR = '2023'
+    DEFAULT_YEAR = os.getenv('DEFAULT_YEAR')
     MAX_CONTENT_LENGTH = 10 * 1024 * 1024
     CHECK_ATTACHMENT_DIR = os.getenv('CHECK_ATTACHMENT_DIR')
 
@@ -61,10 +61,10 @@ class EnumerateData:
     hospital_place = ('本地', '市内异地', '省内异地', '跨省异地')
     hospital_level = ('三级特等', '三级甲等', '三级乙等', '三级丙等', '二级甲等', '二级乙等', '二级丙等', '一级甲等', '一级乙等', '一级丙等', '无等级', '其他')
     evidence_type = ('医保电子凭证', '居民身份证', '社会保障卡', '终端扫码', '终端扫脸', '电子社会保障卡', '其他')
-    year = ('2021', '2022', '2023')
+    year = ('2020', '2021', '2022', '2023')
     hospital_community_dict = {
-        '市立医院': ('黄柏镇', '槎水镇', '源潭镇', '余井镇', '梅城镇', '官庄镇', '塔畈乡', '龙潭乡', '其他'),
-        '中医院': ('水吼镇', '黄铺镇', '王河镇', '油坝乡', '黄泥镇', '五庙乡', '痘姆乡', '天柱山镇', '开发区')
+        '市立医院': ('黄柏镇', '槎水镇', '源潭镇', '余井镇', '梅城镇', '官庄镇', '塔畈乡', '龙潭乡', '开发区', '其他'),
+        '中医院': ('水吼镇', '黄铺镇', '王河镇', '油坝乡', '黄泥镇', '五庙乡', '痘姆乡', '天柱山镇')
     }
     hospital_community = tuple(hospital_community_dict.keys())
     cure_type_dict = {
