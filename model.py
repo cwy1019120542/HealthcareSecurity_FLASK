@@ -141,6 +141,7 @@ class SettleData2020(db.Model):
     is_use_account = db.Column(db.Boolean)
     is_valid = db.Column(db.Boolean)
     is_refund = db.Column(db.Boolean)
+    overyear_refund = db.Column(db.Enum(*EnumerateData.overyear_refund))
 
 class SettleData2021(db.Model):
     __tablename__ = "settle_data_2021"
@@ -188,6 +189,7 @@ class SettleData2021(db.Model):
     is_use_account = db.Column(db.Boolean)
     is_valid = db.Column(db.Boolean)
     is_refund = db.Column(db.Boolean)
+    overyear_refund = db.Column(db.Enum(*EnumerateData.overyear_refund))
 
 class SettleData2022(db.Model):
     __tablename__ = "settle_data_2022"
@@ -235,6 +237,7 @@ class SettleData2022(db.Model):
     is_use_account = db.Column(db.Boolean)
     is_valid = db.Column(db.Boolean)
     is_refund = db.Column(db.Boolean)
+    overyear_refund = db.Column(db.Enum(*EnumerateData.overyear_refund))
 
 
 class SettleData2023(db.Model):
@@ -283,6 +286,7 @@ class SettleData2023(db.Model):
     is_use_account = db.Column(db.Boolean)
     is_valid = db.Column(db.Boolean)
     is_refund = db.Column(db.Boolean)
+    overyear_refund = db.Column(db.Enum(*EnumerateData.overyear_refund))
 
 class Staff(db.Model):
     __tablename__ = "staff"

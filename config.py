@@ -81,6 +81,7 @@ class EnumerateData:
     pay_type_operator_dict = {'大于': '__gt__', '小于': '__lt__', '等于': '__eq__'}
     pay_type_operator_label = tuple(pay_type_operator_dict.keys())
     pay_type_operator = tuple(pay_type_operator_dict.values())
+    overyear_refund = ('冲销', '被冲销')
     check_dict = {
         '加分': {
             '信息报送': {'县级': 0.5, '市级': 1, '省级': 1.5, '中央级': 2}, '获奖': {'单位': 1}, '表彰': {'群众': 1}
@@ -115,7 +116,7 @@ class EnumerateData:
     education = ('大专', '中专', '本科')
     enumerate_field = ('attribute_dict', "insured_state", "town_village_dict", 'town', 'village', 'person_type', 'hospital_place', 'cure_type_dict', 'cure_type', 'year', 'hospital_community_dict', 'hospital_community',
                   'default_year', 'pay_type_dict', 'pay_type_label', 'cure_type_gather', 'attribute_gather_dict', 'attribute_gather', 'pay_type_operator_dict', 'pay_type_operator_label',
-                       'check_dict', 'operate_type', 'check_type', 'check_source', 'hospital_level', 'department', 'position', 'education')
+                       'check_dict', 'operate_type', 'check_type', 'check_source', 'hospital_level', 'department', 'position', 'education', 'overyear_refund')
 
 class StaticData:
     own_expense_standard_dict = {'2019': 250, '2020': 250, '2021': 280, '2022': 320, '2023': 350}
