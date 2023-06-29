@@ -78,7 +78,7 @@ class EnumerateData:
     pay_type_dict = {'总费用': 'all_expense', '全自费金额': 'self_expense', '超限价自费费用': 'over_expense', '先行自付金额': 'first_expense', '范围内费用': 'inner_expense', '起付线': 'start_pay', '统筹基金': 'overall_pay', '大额医疗': 'large_pay', '大病保险': 'big_pay', '医疗救助': 'rescue_pay', '公务员医疗补助': 'civil_pay', '其他基金': 'other_pay', '基金支付总额': 'all_pay', '个人现金': 'cash_pay', '个人账户': 'account_pay', '账户共济': 'together_pay'}
     pay_type_label = tuple(pay_type_dict.keys())
     pay_type = tuple(pay_type_dict.values())
-    pay_type_operator_dict = {'大于': '__gt__', '小于': '__lt__', '等于': '__eq__'}
+    pay_type_operator_dict = {'大于': '__gt__', '大于等于': '__ge__','小于': '__lt__', '小于等于': '__le__','等于': '__eq__', '不等于': '__ne__',}
     pay_type_operator_label = tuple(pay_type_operator_dict.keys())
     pay_type_operator = tuple(pay_type_operator_dict.values())
     overyear_refund = ('冲销', '被冲销')
@@ -114,9 +114,11 @@ class EnumerateData:
     department = ('征缴股', '审核股')
     position = ('前台', '后台')
     education = ('大专', '中专', '本科')
+    open_data_type_dict = {'医疗机构一站式救助汇总表': 'hospital', '城乡居民基本医疗、大病保险、医疗救助公示': 'pay', '一站式医疗救助花名册': 'rescue'}
+    open_data_type = tuple(open_data_type_dict.keys())
     enumerate_field = ('attribute_dict', "insured_state", "town_village_dict", 'town', 'village', 'person_type', 'hospital_place', 'cure_type_dict', 'cure_type', 'year', 'hospital_community_dict', 'hospital_community',
                   'default_year', 'pay_type_dict', 'pay_type_label', 'cure_type_gather', 'attribute_gather_dict', 'attribute_gather', 'pay_type_operator_dict', 'pay_type_operator_label',
-                       'check_dict', 'operate_type', 'check_type', 'check_source', 'hospital_level', 'department', 'position', 'education', 'overyear_refund')
+                       'check_dict', 'operate_type', 'check_type', 'check_source', 'hospital_level', 'department', 'position', 'education', 'overyear_refund', 'open_data_type_dict', 'open_data_type')
 
 class StaticData:
     own_expense_standard_dict = {'2019': 250, '2020': 250, '2021': 280, '2022': 320, '2023': 350}

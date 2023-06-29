@@ -168,22 +168,6 @@ class Base(views.MethodView):
         if self.model_name not in session['authority'] and '*' not in session['authority']:
             abort(403)
 
-    def get_file_name(self):
-        file_name_list = []
-        for key1, value1 in self.parameter_dict.items():
-            if isinstance(value1, dict):
-                for key2, value2 in value1.items():
-                    if isinstance(value2, list):
-                        file_name_list.append('_'.join(values2))
-                    else:
-                        file_name_list.append(value2)
-            else:
-                if isinstance(value1, list):
-                    file_name_list.append('_'.join(value1))
-                else:
-                    file_name_list.append(value1)
-        return '、'.join(file_name_list)
-
     def get_query_parameter(self, model, parameter_dict):
         filter_parameter_list = []
         for key, value in parameter_dict.items():
@@ -193,10 +177,7 @@ class Base(views.MethodView):
                 else:
                     filter_parameter = getattr(model, key).in_(value)
             else:
-                if key.endswith('!'):
-                    filter_parameter = getattr(model, key.rstrip('!')) != value
-                else:
-                    filter_parameter = getattr(model, key) == value
+                filter_parameter = getattr(model, key) == value
             filter_parameter_list.append(filter_parameter)
         return filter_parameter_list
 
@@ -300,7 +281,7 @@ class BaseList(Base):
         if self.is_page:
             self.query = self.query.offset(offset).limit(limit)
         else:
-            if data_count > 25000:
+            if data_count > 50000:
                 abort(413)
         super().clean_get_response()
 

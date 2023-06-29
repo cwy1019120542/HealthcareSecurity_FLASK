@@ -10,17 +10,11 @@ class CivilPayList(Base):
     methods = ['get']
     model_name = 'settle_data'
     entities_dict = {'model': ['id', 'settle_id', 'cure_id', 'self_number', 'name', 'id_number', 'person_type', 'hospital_id', 'hospital_name', 'hospital_level', 'hospital_place', 'start_date', 'end_date', 'settle_date', 'evidence_type', 'all_expense', 'self_expense', 'over_expense', 'first_expense', 'inner_expense', 'start_pay', 'overall_pay', 'large_pay', 'big_pay', 'rescue_pay', 'civil_pay', 'other_pay', 'all_pay', 'cash_pay', 'account_pay', 'together_pay', 'illness_name', 'cure_type', 'overall_percent', 'is_centre', 'operator', 'town', 'village', 'remark']}
-    allowed_parameter = {'GET': {'id_number': ('str', None, "settle_data", True, 18), 'year': ("enum", None, '', True, None), "settle_date": ("combine_date", None, 'settle_data', False, None)}}
+    allowed_parameter = {'GET': {'id_number': ('str', None, "settle_data", True, 18), 'year': ("enum", None, '', True, None), "settle_date": ("combine_date", None, 'settle_data', False, None), 'is_refund': ('bool', None, 'settle_data', False, None), 'is_valid': ('bool', None, 'settle_data', False, None), "cure_type": ("enum", None, 'settle_data', False, None)}}
     decimal_field_list = (
     'all_expense', 'self_expense', 'over_expense', 'first_expense', 'inner_expense', 'start_pay', 'overall_pay',
     'large_pay', 'big_pay', 'rescue_pay', 'civil_pay', 'other_pay', 'all_pay', 'cash_pay', 'account_pay',
     'together_pay', 'overall_percent')
-
-    def make_get_query(self):
-        self.parameter_dict[self.model_name]['cure_type'] = ['普通住院', '外伤住院', '无他方责任意外伤害住院', '分疗程间断住院治疗', '单病种住院', '床日费用住院', '转外诊治住院', '急诊转住院', '自主就医住院', '门诊特病', '门诊慢病']
-        self.parameter_dict[self.model_name]['is_valid'] = True
-        self.parameter_dict[self.model_name]['is_refund'] = False
-        super().make_get_query()
 
     def clean_get_response(self):
         super().clean_get_response()
