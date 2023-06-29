@@ -18,14 +18,15 @@ class InsuredData(Base):
             "page": ('int', None, '', False, None)}
     }
 
-class InsuredDataList(BaseList, InsuredData):
-
     def make_get_query(self):
         pay_type_operator = self.parameter_dict.get(self.model_name, {}).pop('pay_type_operator', None)
         own_expense = self.parameter_dict.get(self.model_name, {}).pop('own_expense', None)
         if pay_type_operator and own_expense != None:
             self.query = self.query.filter(getattr(self.model.own_expense, pay_type_operator)(own_expense))
         super().make_get_query()
+
+
+class InsuredDataList(BaseList, InsuredData):
 
     def clean_get_response(self):
         super().clean_get_response()
