@@ -96,6 +96,11 @@ class Base(views.MethodView):
         return value_split if len(value_split) > 1 else value_split[0]
 
     @staticmethod
+    def clean_list(value, *args, **kwargs):
+        value_split = value.split('|')
+        return value_split if len(value_split) > 1 else value_split[0]
+
+    @staticmethod
     def clean_combine_date(value, *args, **kwargs):
         value_split = value.split('|')
         if len(value_split) < 2:
