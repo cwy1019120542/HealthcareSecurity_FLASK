@@ -22,6 +22,7 @@ class Base(views.MethodView):
     entities_dict = {'model': [], 'join_model': []}
     response_type_dict = {'GET': OK, 'POST': OK, 'PUT': OK, 'DELETE': OK}
     method_dict = {"GET": "args", "POST": "form", "PUT": "form"}
+    operator_dict = {}
 
     def __init__(self, *args, **kwargs):
         self.parameter_dict = {}
@@ -105,17 +106,13 @@ class Base(views.MethodView):
         value_split = value.split('|')
         if len(value_split) < 2:
             abort(400)
-        start_date = datetime.strptime(f'{value_split[0]}-01 00:00:00', '%Y-%m-%d %H:%M:%S')
-        end_date_year, end_date_month = value_split[1].split('-')
-        end_date = datetime.strptime(f'{value_split[1]}-{monthrange(int(end_date_year), int(end_date_month))[1]} 23:59:59', '%Y-%m-%d %H:%M:%S')
-        return [start_date, end_date]
+        value_split[0] = f'{value_split[0]} 00:00:00'
+        value_split[1] = f'{value_split[1]} 23:59:59'
+        return [datetime.strptime(i, '%Y-%m-%d %H:%M:%S') for i in value_split]
 
     @staticmethod
     def clean_date(value, *args, **kwargs):
-        value_split = value.split('T')
-        if len(value_split) < 2:
-            abort(400)
-        return datetime.strptime(value_split[0], '%Y-%m-%d')
+        return datetime.strptime(value, '%Y-%m-%d')
 
     @staticmethod
     def clean_bool(value, *args, **kwargs):
@@ -148,6 +145,21 @@ class Base(views.MethodView):
             abort(400)
         else:
             return value
+
+    def make_operator_query(self):
+        for init_field, operator_group in self.operator_dict.items():
+            operator_field, operator_value_field, model_type = operator_group
+            model_name = getattr(self, f'{model_type}_name')
+            model = getattr(self, model_type)
+            operator = self.parameter_dict.get(model_name, {}).pop(operator_field, None)
+            if operator_value_field:
+                field = self.parameter_dict.get(model_name, {}).pop(init_field, None)
+                operator_value = self.parameter_dict.get(model_name, {}).pop(operator_value_field, None)
+            else:
+                field = init_field
+                operator_value = self.parameter_dict.get(model_name, {}).pop(field, None)
+            if field and operator and operator_value != None:
+                self.query = self.query.filter(getattr(getattr(model, field), operator)(operator_value))
 
     def filter_parameter(self):
         flask_parameter_dict = getattr(request, self.method_dict[self.method])
@@ -240,6 +252,7 @@ class Base(views.MethodView):
             self.query = self.query.with_entities(*(getattr(self.model, i) for i in self.entities_dict.get('model', [])), *(getattr(self.join_model, i) for i in self.entities_dict.get('join_model', [])))
         if self.extra_model:
             self.extra_query = self.extra_model.query
+        self.make_operator_query()
         getattr(self, f'make_{self.method.lower()}_query')()
         getattr(self, f'clean_{self.method.lower()}_response')()
 

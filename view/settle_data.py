@@ -24,14 +24,7 @@ class SettleData(Base):
         }
     }
     decimal_field_list = ('all_expense', 'self_expense', 'over_expense', 'first_expense', 'inner_expense', 'start_pay', 'overall_pay', 'large_pay', 'big_pay', 'rescue_pay', 'civil_pay', 'other_pay', 'all_pay', 'cash_pay', 'account_pay', 'together_pay', 'overall_percent')
-    
-    def make_get_query(self):
-        pay_type = self.parameter_dict.get(self.model_name, {}).pop('pay_type', None)
-        pay_type_operator = self.parameter_dict.get(self.model_name, {}).pop('pay_type_operator', None)
-        pay_type_value = self.parameter_dict.get(self.model_name, {}).pop('pay_type_value', None)
-        if pay_type and pay_type_operator and pay_type_value!=None:
-            self.query = self.query.filter(getattr(getattr(self.model, pay_type), pay_type_operator)(pay_type_value))
-        super().make_get_query()
+    operator_dict = {'pay_type': ('pay_type_operator', 'pay_type_value', 'model')}
 
 class SettleDataList(BaseList, SettleData):
 
@@ -50,6 +43,8 @@ class SettleDataList(BaseList, SettleData):
 
 
 class SettleDataMerge(BaseList, SettleData):
+
+    operator_dict = {}
 
     def make_get_query(self):
         self.query = self.query.with_entities(func.count(self.model.id).label('data_count'), self.model.id_number, *(getattr(self.join_model, i) for i in self.entities_dict['join_model']), *(func.sum(getattr(self.model, i)).label(i) for i in self.decimal_field_list)).group_by(self.model.id_number)
