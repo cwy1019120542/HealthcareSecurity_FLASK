@@ -1,6 +1,6 @@
 from view.insured_data import InsuredDataList, InsuredDataStatistic, InsuredDataListDownload, InsuredDataStatisticDownload
 from view.enumerate_data import EnumerateData
-from view.insured_rate import InsuredRate, SpecialInsuredRate
+from view.insured_rate import InsuredRate, SpecialInsuredRate, InsuredRateDownload, SpecialInsuredRateDownload
 from view.login import Login
 from view.settle_data import SettleDataList, SettleDataStatistic, SettleDataListDownload, SettleDataStatisticDownload, SettleDataMerge, SettleDataMergeDownload
 from view.check_data import StaffList, CheckDataList, StaffListDownload, CheckDataListDownload, CheckAttachment
@@ -21,7 +21,9 @@ route_dict = {
     SettleDataStatisticDownload: '/api/user/<int:user_id>/settle_data/statistic/download',
     Password: '/api/user/<int:user_id>/password',
     InsuredRate: '/api/user/<int:user_id>/insured_rate/',
+    InsuredRateDownload: '/api/user/<int:user_id>/insured_rate/download',
     SpecialInsuredRate: '/api/user/<int:user_id>/special_insured_rate',
+    SpecialInsuredRateDownload: '/api/user/<int:user_id>/special_insured_rate/download',
     SettleDataMerge: '/api/user/<int:user_id>/settle_data/merge',
     SettleDataMergeDownload: '/api/user/<int:user_id>/settle_data/merge/download',
     StaffList: '/api/user/<int:user_id>/staff/list',

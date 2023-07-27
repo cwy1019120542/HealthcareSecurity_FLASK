@@ -1,4 +1,5 @@
 from .base import Base
+from response import ExcelResponse
 from sqlalchemy.sql import func
 from config import StaticData, EnumerateData
 
@@ -26,7 +27,7 @@ class InsuredRate(Base):
             result_list[other_index] = ('其他', result_list[other_index][1]+none_number)
         for town, data_count in result_list:
             target = StaticData.town_target_dict[self.year].get(town, 0)
-            town_dict = {'town': town, 'target': target, 'data_count': data_count, 'percent': self.to_float((data_count, target), 4)}
+            town_dict = {'number': '', 'town': town, 'target': target, 'data_count': data_count, 'percent': self.to_float((data_count, target), 4)}
             self.response_data.append(town_dict)
         self.response_data.sort(key=lambda x:x['percent'], reverse=True)
         all_target = 0
@@ -63,11 +64,16 @@ class SpecialInsuredRate(Base):
         result_list = self.query.all()
         result_dict = {}
         self.response_data = []
+        for town in EnumerateData.town:
+            result_dict[town] = {'number': '', 'town': town, 'target': 0}
+            for insured_state in EnumerateData.insured_state:
+                result_dict[town][insured_state] = 0
+            result_dict[town]['data_count'] = 0
+            result_dict[town]['percent'] = 0
         for result in result_list:
             town, insured_state, data_count = result
-            result_dict.setdefault(town, {})[insured_state] = data_count
+            result_dict[town][insured_state] = data_count
         for town, town_dict in result_dict.items():
-            town_dict['town'] = town
             target = 0
             for insured_state in EnumerateData.insured_state:
                 target += town_dict.setdefault(insured_state, 0)
@@ -76,7 +82,11 @@ class SpecialInsuredRate(Base):
             town_dict['percent'] = self.to_float((town_dict['data_count'], target), 4)
             self.response_data.append(town_dict)
         self.response_data.sort(key=lambda x: x['percent'], reverse=True)
-        all_count_dict = dict.fromkeys(EnumerateData.insured_state, 0)
+        all_count_dict = {'number': '', 'town': '合计', 'target': 0}
+        for insured_state in EnumerateData.insured_state:
+            all_count_dict[insured_state] = 0
+        all_count_dict['data_count'] = 0
+        all_count_dict['percent'] = 0
         target = 0
         for data_index, data in enumerate(self.response_data, 1):
             data['number'] = data_index
@@ -84,10 +94,23 @@ class SpecialInsuredRate(Base):
             for insured_state in EnumerateData.insured_state:
                 all_count_dict[insured_state] += data[insured_state]
                 target += data[insured_state]
-        all_count_dict['number'] = ''
-        all_count_dict['town'] = '合计'
         all_count_dict['target'] = target
         all_count_dict['data_count'] = target-all_count_dict['其他']
         all_count_dict['percent'] = self.to_percent(self.to_float((all_count_dict['data_count'], target), 4))
         self.response_data.append(all_count_dict)
 
+class InsuredRateDownload(InsuredRate):
+    response_type_dict = {'GET': ExcelResponse}
+
+    def clean_get_response(self):
+        super().clean_get_response()
+        self.response_data = (tuple(i.values()) for i in self.response_data)
+        self.extra_response_data = ['序号', '乡镇', '任务数', '完成数', '完成率']
+
+class SpecialInsuredRateDownload(SpecialInsuredRate):
+    response_type_dict = {'GET': ExcelResponse}
+
+    def clean_get_response(self):
+        super().clean_get_response()
+        self.response_data = (tuple(i.values()) for i in self.response_data)
+        self.extra_response_data = ['序号', '乡镇', '任务数', '本地居民', '本地职工(在职)', '本地职工(退休)', '异地居民', '异地职工', '参军', '服刑', '死亡', '失联', '动态新增', '自愿放弃', '其他原因', '完成数', '完成率']

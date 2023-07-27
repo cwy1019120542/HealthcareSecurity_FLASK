@@ -17,7 +17,7 @@ class StaffList(BaseList):
             'name': ('str', None, "staff", False, 20), "department": ("enum", None, "staff", False, None),
             "position": ("enum", None, "staff", False, None), "education": ("enum", None, "staff", False, None),
             'year': ("enum", None, 'check_data', True, None),
-            "page": ('int', None, '', False, None)}
+            "page": ('int', None, '', False, None), "limit": ('int', None, '', False, 1000)}
     }
 
 
@@ -47,7 +47,7 @@ class CheckDataList(BaseList):
             "operate_type": ("enum", None, "check_data", False, None), "check_type": ("enum", None, "check_data", False, None), "check_source": ("enum", None, "check_data", False, None),
             "check_date": ("combine_date", None, "check_data", False, None),
             'year': ("enum", None, 'check_data', True, None),
-            "page": ('int', None, '', False, None)},
+            "page": ('int', None, '', False, None), "limit": ('int', None, '', False, 1000)},
         "POST": {
             "id_number": ('str', None, 'check_data', True, 18),
             "operate_type": ("enum", None, "check_data", True, None),

@@ -121,13 +121,16 @@ class Base(views.MethodView):
     @staticmethod
     def clean_int(value, *args, **kwargs):
         if str(value).isdigit():
-            return int(value)
+            value = int(value)
+            if kwargs['max_value'] and value > kwargs['max_value']:
+                abort(400)
+            return value
         else:
             abort(400)
 
     @staticmethod
     def clean_str(value, *args, **kwargs):
-        if not isinstance(value, str) or len(value) > kwargs['max_len']:
+        if not isinstance(value, str) or len(value) > kwargs['max_value']:
             abort(400)
         return value
 
@@ -172,8 +175,8 @@ class Base(views.MethodView):
         for key, value in request_parameter_dict.items():
             if key not in allowed_parameter_dict or not value:
                 continue
-            value_type, relation, model_name, is_must, max_len = allowed_parameter_dict[key]
-            self.generate_parameter_dict(model_name, key, getattr(self, f'clean_{value_type}')(value, key=key, max_len=max_len), relation)
+            value_type, relation, model_name, is_must, max_value = allowed_parameter_dict[key]
+            self.generate_parameter_dict(model_name, key, getattr(self, f'clean_{value_type}')(value, key=key, max_value=max_value), relation)
         session_town = session.get('town')
         if 'town' in allowed_parameter_dict and session_town and self.is_authentication:
             if 'town' not in self.parameter_dict['person'] or self.parameter_dict['person']['town']!=session_town:
@@ -292,7 +295,7 @@ class BaseList(Base):
 
     def clean_get_response(self):
         page = self.parameter_dict.get("page", 1)
-        limit = 10
+        limit = self.parameter_dict.get("limit", 10)
         offset = (page - 1) * limit
         data_count = self.query.count()
         self.extra_response_data = {'data_count': data_count, 'page': page, 'limit': limit, 'offset': offset}

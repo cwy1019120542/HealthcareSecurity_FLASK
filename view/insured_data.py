@@ -15,7 +15,7 @@ class InsuredData(Base):
             "id_number": ('str', None, 'person', False, 18), "family_number": ('str', None, 'person', False, 20), "pay_type_operator": ("enum", None, 'insured_data', False, None), "own_expense": ('int', None, 'insured_data', False, None), "pay_date": ("combine_date", None, 'insured_data', False, None), "insured_state": ("enum", None, 'insured_data', False, None), "is_civil": ('bool', None, 'insured_data', False, None), "is_account_pay": ('bool', None, 'insured_data', False, None),'name': ('str', None, "person", False, 20),
             "civil_attribute": ("enum", 'or_', "person", False, None), "orphan_attribute": ("enum", 'or_', "person", False, None), "disable_attribute": ("enum", 'or_', "person", False, None), "treat_attribute": ("enum", 'or_', "person", False, None),
             "accident_attribute": ("enum", 'or_', "person", False, None), "poverty_state": ("enum", 'or_', "person", False, None), "town": ("enum", None, "person", False, None), "village": ("enum", None, "person", False, None),'year': ("enum", None, '', True, None),
-            "page": ('int', None, '', False, None), "birthday": ('combine_date', None, 'person', False, None)}
+            "page": ('int', None, '', False, None), "birthday": ('combine_date', None, 'person', False, None), "limit": ('int', None, '', False, 1000)}
     }
     operator_dict = {'own_expense': ('pay_type_operator', None, 'model')}
 
