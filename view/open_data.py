@@ -46,7 +46,7 @@ class OpenDataRescueListDownload(OpenDataList):
     def clean_get_response(self):
         super().clean_get_response()
         for data in self.response_data:
-            data['name'] = data['name'][1] + '**'
+            data['name'] = data['name'][0] + '**'
             data['self_number'] = data['self_number'][:-4] + '****'
         self.response_data = (tuple(i.values()) for i in self.response_data)
         self.extra_response_data = ['序号', '姓名', '个人编号', '医疗救助金额']

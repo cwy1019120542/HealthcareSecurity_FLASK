@@ -330,6 +330,8 @@ class NotifyData(db.Model):
     title = db.Column(db.String(10))
     content = db.Column(db.String(50))
     is_available = db.Column(db.Boolean)
+    operate_date = db.Column(db.Date)
+
 
 model_dict = {
     "person": Person,
