@@ -19,7 +19,18 @@ class NotifyData(BaseList):
         super().make_get_query()
         self.query = self.query.order_by(self.model.operate_date.desc())
 
+    def get_max_date(self, model_str, field):
+        model = model_dict[f'{model_str}_{Config.DEFAULT_YEAR}']
+        max_date = model.query.with_entities(func.max(getattr(model, field)).label(field)).first()
+        if max_date:
+            self.extra_response_data[field] = self.to_string_date(max_date[0])
+        else:
+            self.extra_response_data[field] = ''
+
     def clean_get_response(self):
         super().clean_get_response()
         for data_group in self.response_data:
             data_group['operate_date'] = self.to_string_date(data_group['operate_date'], False)
+        self.get_max_date('insured_data', 'pay_date')
+        self.get_max_date('settle_data', 'settle_date')
+        self.extra_response_data['work_insured_data'], self.extra_response_data['special_insured_date'] = self.model.query.filter(self.model.id==1).first().content.split('|')
