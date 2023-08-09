@@ -8,6 +8,7 @@ from view.notify_data import NotifyData
 from view.user import Password
 from view.civil_pay import CivilPayList, CivilPayListDownload
 from view.open_data import OpenDataHospitalListDownload, OpenDataPayListDownload, OpenDataRescueListDownload
+from view.settle_rate import SettleRate, SettleRateDownload
 route_dict = {
     InsuredDataList: "/api/user/<int:user_id>/insured_data/list",
     InsuredDataStatistic: "/api/user/<int:user_id>/insured_data/statistic",
@@ -37,4 +38,6 @@ route_dict = {
     OpenDataHospitalListDownload: '/api/user/<int:user_id>/open_data/hospital/list/download',
     OpenDataPayListDownload: '/api/user/<int:user_id>/open_data/pay/list/download',
     OpenDataRescueListDownload: '/api/user/<int:user_id>/open_data/rescue/list/download',
+    SettleRate: '/api/user/<int:user_id>/settle_rate',
+    SettleRateDownload: '/api/user/<int:user_id>/settle_rate/download',
 }

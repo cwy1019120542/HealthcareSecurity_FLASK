@@ -32,6 +32,7 @@ class Base(views.MethodView):
         self.extra_model = model_dict.get(self.extra_model_name)
         self.extra_query = None
         self.query = None
+        self.query_list = []
         self.user_id = None
         self.response_type = None
         self.response_data = {}
