@@ -20,7 +20,7 @@ class NotifyData(BaseList):
         self.query = self.query.order_by(self.model.operate_date.desc())
 
     def get_max_date(self, model_str, field):
-        model = model_dict[f'{model_str}_{Config.DEFAULT_YEAR}']
+        model = model_dict[model_str]
         max_date = model.query.with_entities(func.max(getattr(model, field)).label(field)).first()
         if max_date:
             self.extra_response_data[field] = self.to_string_date(max_date[0])
@@ -31,6 +31,7 @@ class NotifyData(BaseList):
         super().clean_get_response()
         for data_group in self.response_data:
             data_group['operate_date'] = self.to_string_date(data_group['operate_date'], False)
-        self.get_max_date('insured_data', 'pay_date')
-        self.get_max_date('settle_data', 'settle_date')
-        self.extra_response_data['work_insured_data'], self.extra_response_data['special_insured_date'] = self.model.query.filter(self.model.id==1).first().content.split('|')
+        self.get_max_date(f'insured_data_{Config.DEFAULT_YEAR}', 'pay_date')
+        self.get_max_date(f'settle_data_{Config.DEFAULT_YEAR}', 'settle_date')
+        self.get_max_date('chronic_illness', 'operate_date')
+        self.extra_response_data['work_insured_date'], self.extra_response_data['special_insured_date'] = self.model.query.filter(self.model.id==1).first().content.split('|')

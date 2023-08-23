@@ -332,6 +332,25 @@ class NotifyData(db.Model):
     is_available = db.Column(db.Boolean)
     operate_date = db.Column(db.Date)
 
+class ChronicIllness(db.Model):
+    __tablename__ = "chronic_illness"
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    id_number = db.Column(db.String(18))
+    illness_name = db.Column(db.String(20))
+    illness_number = db.Column(db.String(30))
+    start_date = db.Column(db.Date)
+    end_date = db.Column(db.Date)
+    hospital_id = db.Column(db.String(20))
+    hospital_name = db.Column(db.String(80))
+    hospital_place = db.Column(db.Enum(*EnumerateData.hospital_place))
+    person_type_simple = db.Column(db.Enum(*EnumerateData.person_type_simple))
+    illness_type = db.Column(db.Enum(*EnumerateData.illness_type))
+    identify_date = db.Column(db.Date)
+    apply_date = db.Column(db.Date)
+    operator = db.Column(db.String(20))
+    operate_date = db.Column(db.DateTime)
+    is_valid = db.Column(db.Boolean)
+    apply_source = db.Column(db.Enum(*EnumerateData.apply_source))
 
 model_dict = {
     "person": Person,
@@ -347,4 +366,5 @@ model_dict = {
     'staff': Staff,
     'check_data': CheckData,
     'notify_data': NotifyData,
+    'chronic_illness': ChronicIllness,
 }

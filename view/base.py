@@ -23,6 +23,7 @@ class Base(views.MethodView):
     response_type_dict = {'GET': OK, 'POST': OK, 'PUT': OK, 'DELETE': OK}
     method_dict = {"GET": "args", "POST": "form", "PUT": "form"}
     operator_dict = {}
+    fuzzy_field = ()
 
     def __init__(self, *args, **kwargs):
         self.parameter_dict = {}
@@ -151,16 +152,15 @@ class Base(views.MethodView):
             return value
 
     def make_operator_query(self):
-        for init_field, operator_group in self.operator_dict.items():
+        for field, operator_group in self.operator_dict.items():
             operator_field, operator_value_field, model_type = operator_group
             model_name = getattr(self, f'{model_type}_name')
             model = getattr(self, model_type)
             operator = self.parameter_dict.get(model_name, {}).pop(operator_field, None)
             if operator_value_field:
-                field = self.parameter_dict.get(model_name, {}).pop(init_field, None)
+                field = self.parameter_dict.get(model_name, {}).pop(field, None)
                 operator_value = self.parameter_dict.get(model_name, {}).pop(operator_value_field, None)
             else:
-                field = init_field
                 operator_value = self.parameter_dict.get(model_name, {}).pop(field, None)
             if field and operator and operator_value != None:
                 self.query = self.query.filter(getattr(getattr(model, field), operator)(operator_value))
@@ -198,7 +198,10 @@ class Base(views.MethodView):
                 else:
                     filter_parameter = getattr(model, key).in_(value)
             else:
-                filter_parameter = getattr(model, key) == value
+                if key in self.fuzzy_field:
+                    filter_parameter = getattr(model, key).contains(value)
+                else:
+                    filter_parameter = getattr(model, key) == value
             filter_parameter_list.append(filter_parameter)
         return filter_parameter_list
 

@@ -18,6 +18,7 @@ class InsuredData(Base):
             "page": ('int', None, '', False, None), "birthday": ('combine_date', None, 'person', False, None), "limit": ('int', None, '', False, 1000)}
     }
     operator_dict = {'own_expense': ('pay_type_operator', None, 'model')}
+    fuzzy_field = ('name', )
 
 
 class InsuredDataList(BaseList, InsuredData):

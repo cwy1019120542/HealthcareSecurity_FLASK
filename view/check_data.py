@@ -19,6 +19,7 @@ class StaffList(BaseList):
             'year': ("enum", None, 'check_data', True, None),
             "page": ('int', None, '', False, None), "limit": ('int', None, '', False, 1000)}
     }
+    fuzzy_field = ('name', )
 
 
     def clean_get_response(self):

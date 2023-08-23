@@ -9,6 +9,7 @@ from view.user import Password
 from view.civil_pay import CivilPayList, CivilPayListDownload
 from view.open_data import OpenDataHospitalListDownload, OpenDataPayListDownload, OpenDataRescueListDownload
 from view.settle_rate import SettleRate, SettleRateDownload
+from view.chronic_illness import ChronicIllnessList, ChronicIllnessStatistic, ChronicIllnessListDownload, ChronicIllnessStatisticDownload
 route_dict = {
     InsuredDataList: "/api/user/<int:user_id>/insured_data/list",
     InsuredDataStatistic: "/api/user/<int:user_id>/insured_data/statistic",
@@ -40,4 +41,8 @@ route_dict = {
     OpenDataRescueListDownload: '/api/user/<int:user_id>/open_data/rescue/list/download',
     SettleRate: '/api/user/<int:user_id>/settle_rate',
     SettleRateDownload: '/api/user/<int:user_id>/settle_rate/download',
+    ChronicIllnessList: '/api/user/<int:user_id>/chronic_illness/list',
+    ChronicIllnessStatistic: '/api/user/<int:user_id>/chronic_illness/statistic',
+    ChronicIllnessListDownload: '/api/user/<int:user_id>/chronic_illness/list/download',
+    ChronicIllnessStatisticDownload: '/api/user/<int:user_id>/chronic_illness/statistic/download',
 }
