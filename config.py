@@ -15,7 +15,7 @@ class Config:
 
 class EnumerateData:
     attribute_dict = {
-        'civil_attribute': ('农村特困供养', '城市特困供养', '农村低保', '城市低保', '农村低保边缘', '城市低保边缘'),
+        'civil_attribute': ('农村特困', '城市特困', '农村低保', '城市低保', '低保边缘家庭人员', '因病致贫家庭重病患者'),
         'poverty_state': ('监测户', '稳定脱贫人口', '致贫返贫人口', '贫困人口'),
         'orphan_attribute': ('孤儿', '事实无人抚养儿童'),
         'disable_attribute': ('重度残疾人',),
@@ -29,8 +29,8 @@ class EnumerateData:
     treat_attribute = attribute_dict['treat_attribute']
     accident_attribute = attribute_dict['accident_attribute']
     attribute_gather_dict = {
-        '应保尽保人群': ('农村特困供养', '城市特困供养', '农村低保', '城市低保', '监测户', '稳定脱贫人口', '致贫返贫人口', '孤儿', '事实无人抚养儿童', '肇事肇祸精神病人'),
-        '参保资助人群': ('农村特困供养', '城市特困供养', '农村低保', '城市低保', '监测户', '致贫返贫人口', '孤儿', '事实无人抚养儿童', '重度残疾人', '重点优抚对象')
+        '应保尽保人群': ('农村特困', '城市特困', '农村低保', '城市低保', '监测户', '稳定脱贫人口', '致贫返贫人口', '孤儿', '事实无人抚养儿童', '肇事肇祸精神病人', '低保边缘家庭人员', '因病致贫家庭重病患者'),
+        '参保资助人群': ('农村特困', '城市特困', '农村低保', '城市低保', '监测户', '致贫返贫人口', '孤儿', '事实无人抚养儿童', '重度残疾人', '重点优抚对象')
     }
     attribute_gather = tuple(attribute_gather_dict.keys())
     insured_state = ('本地居民', '本地职工(在职)', '本地职工(退休)','异地居民', '异地职工', '死亡', '失联', '参军', '服刑', '动态新增', '自愿放弃', '其他')
@@ -55,7 +55,7 @@ class EnumerateData:
         '其他': ('其他', ),}
     town = tuple(town_village_dict.keys())
     village = tuple(set(j for i in town_village_dict.values() for j in i))
-    authority = {'管理员': ('*', ), '服务中心': ('user', 'insured_data', 'settle_data', 'check_data', 'staff', 'check_attachment'), '医保局': ('user', 'insured_data', 'settle_data'), '政府': ('user', 'insured_data')}
+    authority = {'管理员': ('*', ), '服务中心': ('user', 'insured_data', 'settle_data', 'check_data', 'staff', 'check_attachment', 'chronic_illness'), '医保局': ('user', 'insured_data', 'settle_data', 'chronic_illness'), '政府': ('user', 'insured_data')}
     identity = tuple(authority.keys())
     person_type = ('居民', '在职职工', '退休职工')
     person_type_simple = ('居民', '职工')
