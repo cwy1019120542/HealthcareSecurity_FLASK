@@ -9,7 +9,7 @@ class InsuredData(Base):
     methods = ['get']
     model_name = "insured_data"
     join_model_name = 'person'
-    entities_dict = {'model': ['id_number', 'own_expense', 'pay_date', 'insured_state', 'is_civil', 'remark', 'is_account_pay'], 'join_model': ['name', 'civil_attribute', 'poverty_state', 'orphan_attribute', 'disable_attribute', 'treat_attribute', 'accident_attribute', 'town', 'village', 'phone_number', 'family_number']}
+    entities_dict = {'model': ['id_number', 'own_expense', 'pay_date', 'insured_state', 'is_civil', 'remark', 'is_account_pay'], 'join_model': ['name', 'civil_attribute', 'poverty_state', 'orphan_attribute', 'disable_attribute', 'treat_attribute', 'accident_attribute', 'town', 'village', 'phone_number', 'family_number', 'sex']}
     allowed_parameter = {
         "GET": {
             "id_number": ('str', None, 'person', False, 18), "family_number": ('str', None, 'person', False, 20), "pay_type_operator": ("enum", None, 'insured_data', False, None), "own_expense": ('int', None, 'insured_data', False, None), "pay_date": ("combine_date", None, 'insured_data', False, None), "insured_state": ("enum", None, 'insured_data', False, None), "is_civil": ('bool', None, 'insured_data', False, None), "is_account_pay": ('bool', None, 'insured_data', False, None),'name': ('str', None, "person", False, 20),
