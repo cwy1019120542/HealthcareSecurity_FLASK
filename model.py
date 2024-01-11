@@ -18,6 +18,7 @@ class Person(db.Model):
     phone_number = db.Column(db.String(20))
     family_number = db.Column(db.String(20))
     birthday = db.Column(db.Date)
+    sex = db.Column(db.Enum(*EnumerateData.sex))
 
 class InsuredData2020(db.Model):
     __tablename__ = "insured_data_2020"
@@ -158,6 +159,17 @@ class SettleData2020(db.Model):
     is_valid = db.Column(db.Boolean)
     is_refund = db.Column(db.Boolean)
     overyear_refund = db.Column(db.Enum(*EnumerateData.overyear_refund))
+    in_department = db.Column(db.String(30))
+    out_department = db.Column(db.String(30))
+    in_bed = db.Column(db.String(30))
+    illness_bed = db.Column(db.String(30))
+    out_bed = db.Column(db.String(30))
+    in_diagnose = db.Column(db.String(70))
+    doctor_id = db.Column(db.String(30))
+    doctor_name = db.Column(db.String(30))
+    out_diagnose_id = db.Column(db.String(30))
+    out_diagnose = db.Column(db.String(70))
+    in_id = db.Column(db.String(30))
 
 class SettleData2021(db.Model):
     __tablename__ = "settle_data_2021"
@@ -206,6 +218,17 @@ class SettleData2021(db.Model):
     is_valid = db.Column(db.Boolean)
     is_refund = db.Column(db.Boolean)
     overyear_refund = db.Column(db.Enum(*EnumerateData.overyear_refund))
+    in_department = db.Column(db.String(30))
+    out_department = db.Column(db.String(30))
+    in_bed = db.Column(db.String(30))
+    illness_bed = db.Column(db.String(30))
+    out_bed = db.Column(db.String(30))
+    in_diagnose = db.Column(db.String(70))
+    doctor_id = db.Column(db.String(30))
+    doctor_name = db.Column(db.String(30))
+    out_diagnose_id = db.Column(db.String(30))
+    out_diagnose = db.Column(db.String(70))
+    in_id = db.Column(db.String(30))
 
 class SettleData2022(db.Model):
     __tablename__ = "settle_data_2022"
@@ -254,7 +277,17 @@ class SettleData2022(db.Model):
     is_valid = db.Column(db.Boolean)
     is_refund = db.Column(db.Boolean)
     overyear_refund = db.Column(db.Enum(*EnumerateData.overyear_refund))
-
+    in_department = db.Column(db.String(30))
+    out_department = db.Column(db.String(30))
+    in_bed = db.Column(db.String(30))
+    illness_bed = db.Column(db.String(30))
+    out_bed = db.Column(db.String(30))
+    in_diagnose = db.Column(db.String(70))
+    doctor_id = db.Column(db.String(30))
+    doctor_name = db.Column(db.String(30))
+    out_diagnose_id = db.Column(db.String(30))
+    out_diagnose = db.Column(db.String(70))
+    in_id = db.Column(db.String(30))
 
 class SettleData2023(db.Model):
     __tablename__ = "settle_data_2023"
@@ -303,6 +336,17 @@ class SettleData2023(db.Model):
     is_valid = db.Column(db.Boolean)
     is_refund = db.Column(db.Boolean)
     overyear_refund = db.Column(db.Enum(*EnumerateData.overyear_refund))
+    in_department = db.Column(db.String(30))
+    out_department = db.Column(db.String(30))
+    in_bed = db.Column(db.String(30))
+    illness_bed = db.Column(db.String(30))
+    out_bed = db.Column(db.String(30))
+    in_diagnose = db.Column(db.String(70))
+    doctor_id = db.Column(db.String(30))
+    doctor_name = db.Column(db.String(30))
+    out_diagnose_id = db.Column(db.String(30))
+    out_diagnose = db.Column(db.String(70))
+    in_id = db.Column(db.String(30))
 
 class SettleData2024(db.Model):
     __tablename__ = "settle_data_2024"
@@ -351,6 +395,17 @@ class SettleData2024(db.Model):
     is_valid = db.Column(db.Boolean)
     is_refund = db.Column(db.Boolean)
     overyear_refund = db.Column(db.Enum(*EnumerateData.overyear_refund))
+    in_department = db.Column(db.String(30))
+    out_department = db.Column(db.String(30))
+    in_bed = db.Column(db.String(30))
+    illness_bed = db.Column(db.String(30))
+    out_bed = db.Column(db.String(30))
+    in_diagnose = db.Column(db.String(70))
+    doctor_id = db.Column(db.String(30))
+    doctor_name = db.Column(db.String(30))
+    out_diagnose_id = db.Column(db.String(30))
+    out_diagnose = db.Column(db.String(70))
+    in_id = db.Column(db.String(30))
 
 class Staff(db.Model):
     __tablename__ = "staff"
