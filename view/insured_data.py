@@ -62,7 +62,7 @@ class InsuredDataListDownload(InsuredDataList):
     def clean_get_response(self):
         super().clean_get_response()
         self.response_data = (tuple(i.values()) for i in self.response_data)
-        self.extra_response_data = ['序号', '身份证号', '自付金额', '支付日期', '参保情况', '是否参加公务员医疗补助', '备注', '是否共济缴费', '姓名','乡镇', '村', '手机号', '户号', '人员属性']
+        self.extra_response_data = ['序号', '身份证号', '自付金额', '支付日期', '参保情况', '是否参加公务员医疗补助', '备注', '是否共济缴费', '姓名','乡镇', '村', '手机号', '户号', '性别', '人员属性']
 
 class InsuredDataStatisticDownload(InsuredDataStatistic):
 
