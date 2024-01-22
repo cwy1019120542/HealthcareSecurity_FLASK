@@ -83,7 +83,7 @@ class CivilPayList(Base):
                             civil_pay_type = '正常住院(统筹基金支出比例错误)'
                         else:
                             civil_pay_type = '保底报销(统筹基金支出比例错误)'
-            if civil_inner_expense <= 0:
+            if civil_inner_expense < 0:
                 civil_inner_expense = 0
                 civil_out_expense = cash_pay + account_pay
                 civil_pay_type += '(基金总支付大于范围内费用)'
@@ -92,6 +92,7 @@ class CivilPayList(Base):
                     civil_out_expense = first_expense
                 elif '保底报销' in civil_pay_type:
                     civil_inner_expense = 0
+                    civil_out_expense = cash_pay + account_pay
             data_group['start_civil_pay'] = self.to_float(start_civil_pay)
             data_group['start_inner_pay'] = self.to_float(start_inner_pay)
             civil_inner_expense -= start_civil_pay
