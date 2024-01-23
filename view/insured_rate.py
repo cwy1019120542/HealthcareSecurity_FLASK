@@ -23,8 +23,12 @@ class InsuredRate(Base):
         town_list = [i[0] for i in result_list]
         if None in town_list:
             none_number = result_list.pop(town_list.index(None))[1]
-            other_index = town_list.index('其他')
-            result_list[other_index] = ('其他', result_list[other_index][1]+none_number)
+            other_count = 0
+            if '其他' in town_list:
+                other_index = town_list.index('其他')
+                other_count = result_list[other_index][1]
+                result_list.pop(other_index)
+            result_list.append(('其他', other_count+none_number))
         for town, data_count in result_list:
             target = StaticData.town_target_dict[self.year].get(town, 0)
             town_dict = {'number': '', 'town': town, 'target': target, 'data_count': data_count, 'percent': self.to_float((data_count, target), 4)}

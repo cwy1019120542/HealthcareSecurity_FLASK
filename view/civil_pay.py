@@ -16,6 +16,10 @@ class CivilPayList(Base):
     'large_pay', 'big_pay', 'rescue_pay', 'civil_pay', 'other_pay', 'all_pay', 'cash_pay', 'account_pay',
     'together_pay', 'overall_percent')
 
+    def make_get_query(self):
+        super().make_get_query()
+        self.query = self.query.order_by(self.model.settle_date)
+
     def clean_get_response(self):
         super().clean_get_response()
         start_civil_pay = 400
