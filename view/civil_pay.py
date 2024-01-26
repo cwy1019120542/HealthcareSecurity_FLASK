@@ -10,11 +10,12 @@ class CivilPayList(Base):
     methods = ['get']
     model_name = 'settle_data'
     entities_dict = {'model': ['id', 'settle_id', 'cure_id', 'self_number', 'name', 'id_number', 'person_type', 'hospital_id', 'hospital_name', 'hospital_level', 'hospital_place', 'start_date', 'end_date', 'settle_date', 'evidence_type', 'all_expense', 'self_expense', 'over_expense', 'first_expense', 'inner_expense', 'start_pay', 'overall_pay', 'large_pay', 'big_pay', 'rescue_pay', 'civil_pay', 'other_pay', 'all_pay', 'cash_pay', 'account_pay', 'together_pay', 'illness_name', 'cure_type', 'overall_percent', 'is_centre', 'operator', 'town', 'village', 'remark']}
-    allowed_parameter = {'GET': {'id_number': ('str', None, "settle_data", True, 18), 'year': ("enum", None, '', True, None), "settle_date": ("combine_date", None, 'settle_data', False, None), 'is_refund': ('bool', None, 'settle_data', False, None), 'is_valid': ('bool', None, 'settle_data', False, None), "cure_type": ("enum", None, 'settle_data', False, None)}}
+    allowed_parameter = {'GET': {'id_number': ('str', None, "settle_data", True, 18), 'year': ("enum", None, '', True, None), "settle_date": ("combine_date", None, 'settle_data', False, None), 'is_refund': ('bool', None, 'settle_data', False, None), 'is_valid': ('bool', None, 'settle_data', False, None), "cure_type": ("enum", None, 'settle_data', False, None), "pay_type_operator": ("enum", None, 'settle_data', False, None), "end_date": ('date', None, 'settle_data', False, None)}}
     decimal_field_list = (
     'all_expense', 'self_expense', 'over_expense', 'first_expense', 'inner_expense', 'start_pay', 'overall_pay',
     'large_pay', 'big_pay', 'rescue_pay', 'civil_pay', 'other_pay', 'all_pay', 'cash_pay', 'account_pay',
     'together_pay', 'overall_percent')
+    operator_dict = {'end_date': ('pay_type_operator', None, 'model')}
 
     def make_get_query(self):
         super().make_get_query()
@@ -63,7 +64,7 @@ class CivilPayList(Base):
             civil_inner_expense = inner_expense - all_pay
             civil_out_expense = all_expense - inner_expense
             system_overall_pay = (inner_expense - start_pay) * overall_percent
-            if cure_type in ('门诊特病', '门诊慢病'):
+            if cure_type in ('门诊特病', '门诊慢病', '单病种住院', '门诊单病种'):
                 civil_pay_type = '慢特病'
             else:
                 if overall_percent:
@@ -91,12 +92,11 @@ class CivilPayList(Base):
                 civil_inner_expense = 0
                 civil_out_expense = cash_pay + account_pay
                 civil_pay_type += '(基金总支付大于范围内费用)'
-            else:
-                if '慢特病' in civil_pay_type:
-                    civil_out_expense = first_expense
-                elif '保底报销' in civil_pay_type:
-                    civil_inner_expense = 0
-                    civil_out_expense = cash_pay + account_pay
+            if '慢特病' in civil_pay_type:
+                civil_out_expense = first_expense
+            elif '保底报销' in civil_pay_type:
+                civil_inner_expense = 0
+                civil_out_expense = cash_pay + account_pay
             data_group['start_civil_pay'] = self.to_float(start_civil_pay)
             data_group['start_inner_pay'] = self.to_float(start_inner_pay)
             civil_inner_expense -= start_civil_pay
