@@ -38,26 +38,26 @@ class EvidenceRate(Base):
         self.response_data = []
         data_group_dict = {}
         for query_group in self.query_list:
-            year, query = query_group
+            year_key, query = query_group
             for hospital_name, evidence_type, time_count in query.all():
-                data_group_dict.setdefault(hospital_name, {}).setdefault(year, {})[evidence_type] = time_count
+                data_group_dict.setdefault(hospital_name, {}).setdefault(year_key, {})[evidence_type] = time_count
         sum_dict = {'number': '', 'hospital_name': '合计', 'compare_year_sum_count': 0, 'compare_year_evidence_count': 0, 'compare_year_evidence_rate': 0, 'year_sum_count': 0, 'year_evidence_count': 0, 'year_evidence_rate': 0}
         for hospital_name, data_dict in data_group_dict.items():
             response_group = {'number': '', 'hospital_name': hospital_name, }
-            for year in ('compare_year', 'year'):
-                data = data_dict[year]
+            for year_key in ('compare_year', 'year'):
+                data = data_dict.get(year_key, {})
                 evidence_count = data.get('医保电子凭证', 0)
                 sum_count = sum(data.values())
                 evidence_rate = (evidence_count / sum_count) if sum_count else 0
-                response_group[f'{year}_sum_count'] = sum_count
-                response_group[f'{year}_evidence_count'] = evidence_count
-                sum_dict[f'{year}_sum_count'] += sum_count
-                sum_dict[f'{year}_evidence_count'] += evidence_count
-                response_group[f'{year}_evidence_rate'] = evidence_rate
+                response_group[f'{year_key}_sum_count'] = sum_count
+                response_group[f'{year_key}_evidence_count'] = evidence_count
+                sum_dict[f'{year_key}_sum_count'] += sum_count
+                sum_dict[f'{year_key}_evidence_count'] += evidence_count
+                response_group[f'{year_key}_evidence_rate'] = evidence_rate
             response_group[f'increase_evidence_rate'] = response_group[f'year_evidence_rate'] - response_group[f'compare_year_evidence_rate']
             self.response_data.append(response_group)
-        sum_dict['compare_year_evidence_rate'] = sum_dict['compare_year_evidence_count'] / sum_dict['compare_year_sum_count']
-        sum_dict['year_evidence_rate'] = sum_dict['year_evidence_count'] / sum_dict['year_sum_count']
+        sum_dict['compare_year_evidence_rate'] = (sum_dict['compare_year_evidence_count'] / sum_dict['compare_year_sum_count']) if sum_dict['compare_year_sum_count'] else 0
+        sum_dict['year_evidence_rate'] = (sum_dict['year_evidence_count'] / sum_dict['year_sum_count']) if sum_dict['year_sum_count'] else 0
         sum_dict['increase_evidence_rate'] = sum_dict['year_evidence_rate'] - sum_dict['compare_year_evidence_rate']
         self.response_data.sort(key=lambda x:x['year_evidence_rate'], reverse=True)
         self.response_data.append(sum_dict)
