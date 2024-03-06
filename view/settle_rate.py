@@ -26,7 +26,8 @@ class SettleRate(Base):
             settle_date_dict[year_key] = self.parameter_dict[self.model_name].pop(f'{year_key}_settle_date', None)
         for year_key in ('compare_year', 'year'):
             year = self.parameter_dict.get(year_key, Config.DEFAULT_YEAR)
-            self.parameter_dict[self.model_name]['settle_date'] = settle_date_dict[year_key]
+            if settle_date_dict[year_key]:
+                self.parameter_dict[self.model_name]['settle_date'] = settle_date_dict[year_key]
             self.model = model_dict[f'{self.model_name}_{year}']
             self.query = self.model.query
             self.query = self.query.with_entities(self.model.hospital_place, self.model.is_centre, func.count(self.model.id).label('time_count'), func.count(distinct(self.model.id_number)).label('number_count'), func.sum(self.model.all_expense).label('all_expense'), func.sum(self.model.all_pay).label('all_pay')).group_by(self.model.hospital_place, self.model.is_centre)
