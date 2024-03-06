@@ -25,6 +25,7 @@ class EvidenceRate(Base):
     def make_get_query(self):
         for year_key in ('compare_year', 'year'):
             year = self.parameter_dict.get(year_key, Config.DEFAULT_YEAR)
+            self.extra_response_data[year_key] = year
             settle_date = self.parameter_dict[self.model_name].pop(f'{year_key}_settle_date', None)
             if settle_date:
                 self.parameter_dict[self.model_name]['settle_date'] = settle_date
