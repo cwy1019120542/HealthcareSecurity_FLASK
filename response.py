@@ -22,7 +22,6 @@ class ExcelResponse(Response):
         }
         super().__init__(openpyxl.writer.excel.save_virtual_workbook(wb), self.j_status, header, *args, **kwargs)
 
-
 class JsonResponse(Response):
 
     j_status = 200

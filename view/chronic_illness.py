@@ -1,5 +1,7 @@
-from .base import BaseList, Base
+import os
+from .base import BaseList, Base, Attachment
 from flask import session
+from config import Config
 from response import ExcelResponse, OK
 from sqlalchemy.sql import func, distinct
 
@@ -60,3 +62,18 @@ class ChronicIllnessStatisticDownload(ChronicIllnessStatistic):
         super().clean_get_response()
         self.response_data = [tuple(self.response_data.values())]
         self.extra_response_data = ['条数', '人数']
+
+class ChronicIllnessCard(Attachment):
+
+    methods = ['get']
+    allowed_parameter = {
+        'GET': {"id_number": ('str', None, '', True, 18), "town": ("enum", None, "", True, None), "village": ("enum", None, "", True, None)},
+    }
+    model_name = "chronic_illness"
+    method_dict = {"GET": "args"}
+    response_type_dict = {'GET': ''}
+    base_dir = Config.CHRONIC_ILLNESS_CARD_DIR
+
+    def get_file_path(self):
+        return os.path.join(self.base_dir, self.parameter_dict['town'], self.parameter_dict['village']), f'{self.parameter_dict["id_number"]}.pdf'
+

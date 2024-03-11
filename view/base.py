@@ -334,10 +334,14 @@ class Attachment(Base):
     def make_get_query(self):
         pass
 
+    def get_file_path(self):
+        return self.base_dir, self.parameter_dict['attachment_id']
+
     def clean_get_response(self):
-        attachment_id = self.parameter_dict['attachment_id']
-        file_path = os.path.join(self.base_dir, attachment_id)
+        print(self.get_file_path())
+        file_dir, file_name = self.get_file_path()
+        file_path = os.path.join(file_dir, file_name)
         if not os.path.exists(file_path):
             abort(404)
         self.response_data = send_file(file_path)
-        self.response_data.headers['file_name'] = attachment_id
+        self.response_data.headers['file_name'] = file_name

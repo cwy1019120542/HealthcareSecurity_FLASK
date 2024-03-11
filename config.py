@@ -12,6 +12,7 @@ class Config:
     DEFAULT_YEAR = os.getenv('DEFAULT_YEAR')
     MAX_CONTENT_LENGTH = 10 * 1024 * 1024
     CHECK_ATTACHMENT_DIR = os.getenv('CHECK_ATTACHMENT_DIR')
+    CHRONIC_ILLNESS_CARD_DIR =  os.getenv('CHRONIC_ILLNESS_CARD_DIR')
 
 class EnumerateData:
     attribute_dict = {
