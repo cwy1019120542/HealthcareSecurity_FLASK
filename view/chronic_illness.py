@@ -67,7 +67,7 @@ class ChronicIllnessCard(Attachment):
 
     methods = ['get']
     allowed_parameter = {
-        'GET': {"id_number": ('str', None, '', True, 18), "town": ("enum", None, "", True, None), "village": ("enum", None, "", True, None)},
+        'GET': {"id_number": ('str', None, 'person', True, 18), "town": ("enum", None, "person", True, None), "village": ("enum", None, "person", True, None)},
     }
     model_name = "chronic_illness"
     method_dict = {"GET": "args"}
@@ -75,5 +75,5 @@ class ChronicIllnessCard(Attachment):
     base_dir = Config.CHRONIC_ILLNESS_CARD_DIR
 
     def get_file_path(self):
-        return os.path.join(self.base_dir, self.parameter_dict['town'], self.parameter_dict['village']), f'{self.parameter_dict["id_number"]}.pdf'
+        return os.path.join(self.base_dir, self.parameter_dict['person']['town'], self.parameter_dict['person']['village']), f'{self.parameter_dict["person"]["id_number"]}.pdf'
 
