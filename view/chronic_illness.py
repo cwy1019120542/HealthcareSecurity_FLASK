@@ -11,7 +11,7 @@ class ChronicIllness(Base):
     model_name = "chronic_illness"
     join_model_name = 'person'
     is_year = False
-    entities_dict = {'model': ['id_number', 'illness_name', 'illness_number', 'start_date', 'end_date', 'hospital_id', 'hospital_name', 'hospital_place', 'person_type_simple', 'illness_type', 'identify_date', 'apply_date', 'operator', 'operate_date', 'is_valid', 'apply_source'], 'join_model': ['name', 'civil_attribute', 'poverty_state', 'orphan_attribute', 'disable_attribute', 'treat_attribute', 'accident_attribute', 'town', 'village', 'phone_number', 'family_number']}
+    entities_dict = {'model': ['id_number', 'illness_name', 'illness_number', 'start_date', 'end_date', 'hospital_id', 'hospital_name', 'hospital_place', 'person_type_simple', 'illness_type', 'identify_date', 'apply_date', 'operator', 'operate_date', 'is_valid', 'apply_source'], 'join_model': ['name', 'civil_attribute', 'poverty_state', 'orphan_attribute', 'disable_attribute', 'treat_attribute', 'accident_attribute', 'town', 'village', 'phone_number', 'family_number', 'sex']}
     allowed_parameter = {
         "GET": {
             "id_number": ('str', None, 'person', False, 18), "family_number": ('str', None, 'person', False, 20), 'name': ('str', None, "person", False, 20),
@@ -52,7 +52,7 @@ class ChronicIllnessListDownload(ChronicIllnessList):
     def clean_get_response(self):
         super().clean_get_response()
         self.response_data = (tuple(i.values()) for i in self.response_data)
-        self.extra_response_data = ['序号', '证件号码', '病种名称', '病种编号', '开始日期', '结束日期', '定点医药机构编号', '定点医药机构名称', '医药机构地点类别', '人员类别', '病种类型', '鉴定日期', '申请日期', '经办人', '经办日期', '是否有效', '申报来源', '姓名', '乡镇', '村居', '手机号', '家庭户号', '人员属性']
+        self.extra_response_data = ['序号', '证件号码', '病种名称', '病种编号', '开始日期', '结束日期', '定点医药机构编号', '定点医药机构名称', '医药机构地点类别', '人员类别', '病种类型', '鉴定日期', '申请日期', '经办人', '经办日期', '是否有效', '申报来源', '姓名', '乡镇', '村居', '手机号', '家庭户号', '性别', '人员属性']
 
 class ChronicIllnessStatisticDownload(ChronicIllnessStatistic):
 
