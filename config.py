@@ -56,7 +56,7 @@ class EnumerateData:
         '其他': ('其他', ),}
     town = tuple(town_village_dict.keys())
     village = tuple(set(j for i in town_village_dict.values() for j in i))
-    authority = {'管理员': ('*', ), '服务中心': ('user', 'insured_data', 'settle_data', 'check_data', 'staff', 'check_attachment', 'chronic_illness'), '医保局': ('user', 'insured_data', 'settle_data', 'chronic_illness'), '政府': ('user', 'insured_data', 'chronic_illness')}
+    authority = {'管理员': ('*', ), '服务中心': ('user', 'insured_data', 'settle_data', 'check_data', 'staff', 'check_attachment', 'chronic_illness'), '医保局': ('user', 'insured_data', 'settle_data', 'chronic_illness'), '政府': ('chronic_illness', )}
     identity = tuple(authority.keys())
     person_type = ('居民', '在职职工', '退休职工')
     person_type_simple = ('居民', '职工')
