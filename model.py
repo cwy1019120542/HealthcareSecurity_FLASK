@@ -20,6 +20,22 @@ class Person(db.Model):
     birthday = db.Column(db.Date)
     sex = db.Column(db.Enum(*EnumerateData.sex))
 
+class InsuredData2019(db.Model):
+    __tablename__ = "insured_data_2019"
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    resident_self_number = db.Column(db.String(30))
+    worker_self_number = db.Column(db.String(30))
+    name = db.Column(db.String(20))
+    id_number = db.Column(db.String(18), unique=True)
+    own_expense = db.Column(db.Integer)
+    pay_date = db.Column(db.DateTime)
+    insured_state = db.Column(db.Enum(*EnumerateData.insured_state))
+    is_civil = db.Column(db.Boolean)
+    remark = db.Column(db.String(50))
+    is_account_pay = db.Column(db.Boolean)
+    town = db.Column(db.Enum(*EnumerateData.town))
+    village = db.Column(db.Enum(*EnumerateData.village))
+
 class InsuredData2020(db.Model):
     __tablename__ = "insured_data_2020"
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
@@ -111,6 +127,65 @@ class User(db.Model):
     password = db.Column(db.String(20))
     identity = db.Column(db.Enum(*EnumerateData.identity))
     is_available = db.Column(db.Boolean)
+
+class SettleData2019(db.Model):
+    __tablename__ = "settle_data_2019"
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    settle_id = db.Column(db.String(30))
+    cure_id = db.Column(db.String(30))
+    self_number = db.Column(db.String(30))
+    name = db.Column(db.String(20))
+    id_number = db.Column(db.String(18))
+    person_type = db.Column(db.Enum(*EnumerateData.person_type))
+    hospital_id = db.Column(db.String(20))
+    hospital_name = db.Column(db.String(80))
+    hospital_level = db.Column(db.Enum(*EnumerateData.hospital_level))
+    hospital_place = db.Column(db.Enum(*EnumerateData.hospital_place))
+    start_date = db.Column(db.DateTime)
+    end_date = db.Column(db.DateTime)
+    settle_date = db.Column(db.DateTime)
+    evidence_type = db.Column(db.Enum(*EnumerateData.evidence_type))
+    all_expense = db.Column(DOUBLE)
+    self_expense = db.Column(DOUBLE)
+    over_expense = db.Column(DOUBLE)
+    first_expense = db.Column(DOUBLE)
+    inner_expense = db.Column(DOUBLE)
+    start_pay = db.Column(DOUBLE)
+    overall_pay = db.Column(DOUBLE)
+    large_pay = db.Column(DOUBLE)
+    big_pay = db.Column(DOUBLE)
+    rescue_pay = db.Column(DOUBLE)
+    civil_pay = db.Column(DOUBLE)
+    other_pay = db.Column(DOUBLE)
+    all_pay = db.Column(DOUBLE)
+    cash_pay = db.Column(DOUBLE)
+    account_pay = db.Column(DOUBLE)
+    together_pay = db.Column(DOUBLE)
+    illness_name = db.Column(db.String(70))
+    cure_type = db.Column(db.Enum(*EnumerateData.cure_type))
+    overall_percent = db.Column(DOUBLE)
+    is_centre = db.Column(db.Boolean)
+    operator = db.Column(db.String(20))
+    remark = db.Column(db.String(50))
+    town = db.Column(db.Enum(*EnumerateData.town))
+    village = db.Column(db.Enum(*EnumerateData.village))
+    illness_number = db.Column(db.String(30))
+    is_mid_settle = db.Column(db.Boolean)
+    is_use_account = db.Column(db.Boolean)
+    is_valid = db.Column(db.Boolean)
+    is_refund = db.Column(db.Boolean)
+    overyear_refund = db.Column(db.Enum(*EnumerateData.overyear_refund))
+    in_department = db.Column(db.String(50))
+    out_department = db.Column(db.String(50))
+    in_bed = db.Column(db.String(30))
+    illness_bed = db.Column(db.String(30))
+    out_bed = db.Column(db.String(30))
+    in_diagnose = db.Column(db.String(70))
+    doctor_id = db.Column(db.String(30))
+    doctor_name = db.Column(db.String(30))
+    out_diagnose_id = db.Column(db.String(30))
+    out_diagnose = db.Column(db.String(70))
+    in_id = db.Column(db.String(30))
 
 class SettleData2020(db.Model):
     __tablename__ = "settle_data_2020"
@@ -472,12 +547,14 @@ class ChronicIllness(db.Model):
 
 model_dict = {
     "person": Person,
+    "insured_data_2019": InsuredData2019,
     "insured_data_2020": InsuredData2020,
     "insured_data_2021": InsuredData2021,
     "insured_data_2022": InsuredData2022,
     "insured_data_2023": InsuredData2023,
     "insured_data_2024": InsuredData2024,
     'user': User,
+    'settle_data_2019': SettleData2019,
     'settle_data_2020': SettleData2020,
     'settle_data_2021': SettleData2021,
     'settle_data_2022': SettleData2022,
