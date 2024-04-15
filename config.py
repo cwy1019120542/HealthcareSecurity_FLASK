@@ -58,7 +58,7 @@ class EnumerateData:
     village = tuple(set(j for i in town_village_dict.values() for j in i))
     authority = {'管理员': ('*', ), '服务中心': ('user', 'insured_data', 'settle_data', 'check_data', 'staff', 'check_attachment', 'chronic_illness'), '医保局': ('user', 'insured_data', 'settle_data', 'chronic_illness'), '政府': ('chronic_illness', )}
     identity = tuple(authority.keys())
-    person_type = ('居民', '在职职工', '退休职工')
+    person_type = ('居民', '在职职工', '退休职工', '离休')
     person_type_simple = ('居民', '职工')
     hospital_place = ('本地', '市内异地', '省内异地', '跨省异地')
     hospital_level = ('三级特等', '三级甲等', '三级乙等', '三级丙等', '三级无等', '二级甲等', '二级乙等', '二级丙等', '二级无等', '一级甲等', '一级乙等', '一级丙等', '一级无等', '无等级', '其他')
