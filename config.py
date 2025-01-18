@@ -71,9 +71,9 @@ class EnumerateData:
     }
     hospital_community = tuple(hospital_community_dict.keys())
     cure_type_dict = {
-        '住院': ('普通住院', '外伤住院', '无他方责任意外伤害住院', '分疗程间断住院治疗', '单病种住院', '床日费用住院', '转外诊治住院', '急诊转住院', '自主就医住院', '18周岁以下苯丙酮尿症及四氢生物蝶呤缺乏症', '18周岁以下苯丙酮尿症', '日间病床'),
+        '住院': ('普通住院', '外伤住院', '无他方责任意外伤害住院', '分疗程间断住院治疗', '单病种住院', '床日费用住院', '转外诊治住院', '急诊转住院', '自主就医住院', '18周岁以下苯丙酮尿症及四氢生物蝶呤缺乏症', '18周岁以下苯丙酮尿症', '日间病床', '罕见病住院'),
         '慢特病': ('门诊特病', '门诊慢病', '门诊单病种'),
-        '门诊': ('普通门诊', '大额普通门诊', '生育门诊', '门诊两病', '门诊挂号', '新冠门诊', '残疾人辅助器具门诊'),
+        '门诊': ('普通门诊', '大额普通门诊', '生育门诊', '门诊两病', '门诊挂号', '新冠门诊', '残疾人辅助器具门诊', '门诊罕见病'),
         '其他': ('定点药店购药', '生育住院', '大病关怀', '计划生育手术费', '计划生育住院', '独立门诊部个人帐户支付', '其他')
     }
     cure_type = tuple(j for i in cure_type_dict.values() for j in i)
@@ -223,6 +223,9 @@ class EnumerateData:
     enumerate_field = ('attribute_dict', "insured_state", "town_village_dict", 'town', 'village', 'person_type', 'hospital_place', 'cure_type_dict', 'cure_type', 'year', 'hospital_community_dict', 'hospital_community',
                   'default_year', 'pay_type_dict', 'pay_type_label', 'cure_type_gather', 'attribute_gather_dict', 'attribute_gather', 'pay_type_operator_dict', 'pay_type_operator_label',
                        'check_dict', 'operate_type', 'check_type', 'check_source', 'hospital_level', 'department', 'position', 'education', 'overyear_refund', 'open_data_type_dict', 'open_data_type', 'hospital_name_id_dict', 'local_hospital_dict', 'compare_year', 'person_type_simple', 'apply_source', 'illness_type', 'sex', 'evidence_type')
+    project_type = ('床位费', '诊察费', '检查费', '化验费', '治疗费', '手术费', '护理费', '卫生材料费', '西药费', '中药饮片费', '中成药费', '一般诊疗费', '挂号费', '其他费', '特殊材料费', '血液及血液制品', '单病种除外内容', '国产材料', '集中带量', '进口材料', '康复项目', '国谈药品', '手术材料费', '中草药及中医适宜技术', '氧费', '血制品', '人工晶体', '救护车费', 'MRI费', 'CT费', '彩超费', '输氧费', '输血费', '麻醉费', '麻醉相关项目费', '其他医疗费', '单病种超标准床位费', '单病种定额标准费', '医事服务费', '材料费', '内置材料')
+    list_type = ('西药中成药', '中药饮片', '自制剂', '民族药', '医疗服务项目', '医用耗材')
+    project_level = ('甲类', '乙类', '丙类', '可报丙类')
 
 
 class StaticData:
